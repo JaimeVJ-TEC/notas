@@ -10,7 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.tec.appnotas.ui.navigator.main.HomeScreen
+import androidx.navigation.compose.rememberNavController
+import com.tec.appnotas.ui.global.GlobalProvider
+import com.tec.appnotas.ui.navigator.graphs.RootGraph
 import com.tec.appnotas.ui.theme.AppnotasTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +25,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    HomeScreen()
+                    val navController = rememberNavController()
+                    val gp = GlobalProvider(
+                        nav = navController
+                    )
+                    RootGraph(globalProvider = gp)
                 }
             }
         }

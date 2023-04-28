@@ -1,4 +1,4 @@
-package com.tec.appnotas.ui.screens.archivo
+package com.tec.appnotas.ui.screens.opciones
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -6,6 +6,6 @@ import androidx.navigation.NavHostController
 import com.tec.appnotas.ui.global.GlobalProvider
 
 @Composable
-fun ArchivoScreen(navController: NavHostController, globalProvider: GlobalProvider){
-    Text("ARCHIVO")
+fun OpcionesScreen(navController: NavHostController, globalProvider: GlobalProvider){
+    Text("Opciones")
 }
