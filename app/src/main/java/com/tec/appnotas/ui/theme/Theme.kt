@@ -5,15 +5,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.tec.appnotas.data.constants.DarkTopBarColor
+import com.tec.appnotas.data.constants.TopBarColor
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
+    primary = DarkTopBarColor,
     primaryVariant = Purple700,
     secondary = Teal200
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = TopBarColor,
     primaryVariant = Purple700,
     secondary = Teal200
 

@@ -29,6 +29,7 @@ fun HomeScreen(/*navController: NavHostController, globalProvider: GlobalProvide
                      }
                  )
         },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
             DrawerHead()
             DrawerBody(items = DrawerItems,modifier = Modifier, textStyle = null,

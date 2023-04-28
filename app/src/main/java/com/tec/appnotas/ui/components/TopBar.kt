@@ -13,7 +13,7 @@ fun CustomTopBar(title: String, onNavClick: () -> Unit){
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
         navigationIcon = {
-            IconButton(onClick = { onNavClick }) {
+            IconButton(onClick = { onNavClick() }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Toggle drawer")
             }
         }
