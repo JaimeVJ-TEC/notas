@@ -7,38 +7,42 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
+
+
 const val ARGUMENT_NOTAID = "id"
 
 sealed class Screens(val route : String){
+    object SplashScreen : Screens("splash_screen")
     object HomeScreen: Screens("NotasScreen")
     object NotaScreen: Screens("NotaScreen")
 }
 
 sealed class ScaffoldScreen(val route : String,
-                             val title: String,
-                             val icon: ImageVector
+                            val title: String,
+                            val icon: ImageVector
 ){
+
     object Home: ScaffoldScreen(
         route = "Notas",
-        title = "Notas",
+        title = " Notas",
         icon = Icons.Default.Home
     )
 
     object Archivo: ScaffoldScreen(
         route = "Archivo",
-        title = "Archivo",
+        title = " Archivo",
         icon = Icons.Default.AccountBox
     )
 
     object Calendario: ScaffoldScreen(
         route = "Calendario",
-        title = "Calendario",
+        title = " Calendario",
         icon = Icons.Default.DateRange
     )
 
     object Opciones: ScaffoldScreen(
         route = "Opciones",
-        title = "Opciones",
+        title = " Opciones",
         icon = Icons.Default.Settings
     )
 }

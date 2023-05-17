@@ -13,20 +13,25 @@ import com.tec.appnotas.ui.screens.calendario.CalendarioScreen
 import com.tec.appnotas.ui.screens.notas.NotasListScreen
 import com.tec.appnotas.ui.screens.notas.editor.NotaScreen
 import com.tec.appnotas.ui.screens.opciones.OpcionesScreen
+import com.tec.appnotas.ui.navigator.main.SplashScreen
+import com.tec.appnotas.ui.screens.notas.Nota
 
 @Composable
 fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
     NavHost(
         navController = navController,
         route = Graphs.HomeGraph.route,
-        startDestination = ScaffoldScreen.Home.route
+        startDestination = Screens.SplashScreen.route
     ){
+        composable(Screens.SplashScreen.route) {
+            SplashScreen(navController)
+        }
         composable(route = ScaffoldScreen.Home.route){
             NotasListScreen(navController, globalProvider)
         }
 
         composable(route = Screens.NotaScreen.route){
-            NotaScreen(navController,globalProvider)
+            NotaScreen(navController,globalProvider, Nota("Nota 1"))
         }
 
         composable(route = ScaffoldScreen.Archivo.route){

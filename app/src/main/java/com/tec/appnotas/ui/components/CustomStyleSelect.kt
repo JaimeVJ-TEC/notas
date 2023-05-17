@@ -4,28 +4,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.tec.appnotas.data.constants.disabledGrey
 
 @Composable
-fun CustomStyleSelectionText(items: List<SelectItem>){
+fun CustomStyleSelectionText(items: List<SelectItem>, selectedIndex: Int ,selectionChange : () -> Unit){
     Surface(
         color = disabledGrey,
         shape = RoundedCornerShape(16.dp)
     ) {
         Row() {
-            var selectedIndex by remember { mutableStateOf(0) }
 
             items.forEachIndexed { index, selectItem ->
                 val round = index == 0 || index == items.size - 1
@@ -38,7 +32,7 @@ fun CustomStyleSelectionText(items: List<SelectItem>){
                     selectedIndex = selectedIndex
                 )
                 {
-                    selectedIndex = index
+                    selectionChange()
                 }
             }
         }
@@ -46,13 +40,12 @@ fun CustomStyleSelectionText(items: List<SelectItem>){
 }
 
 @Composable
-fun CustomStyleSelectionIcon(items: List<SelectItem>){
+fun CustomStyleSelectionIcon(items: List<SelectItem>, selectedIndex: Int ,selectionChange : (Int) -> Unit){
     Surface(
         color = disabledGrey,
         shape = RoundedCornerShape(16.dp)
     ) {
         Row() {
-            var selectedIndex by remember { mutableStateOf(0) }
 
             items.forEachIndexed { index, selectItem ->
                 val round = index == 0 || index == items.size - 1
@@ -65,7 +58,8 @@ fun CustomStyleSelectionIcon(items: List<SelectItem>){
                     selectedIndex = selectedIndex
                 )
                 {
-                    selectedIndex = index
+                    selectionChange(index)
+//                    selectedIndex = index
                 }
             }
         }
