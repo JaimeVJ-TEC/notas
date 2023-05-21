@@ -15,6 +15,7 @@ import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.graphs.RootGraph
 import com.tec.appnotas.ui.theme.AppnotasTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

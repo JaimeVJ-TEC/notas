@@ -25,46 +25,6 @@ import com.tec.appnotas.ui.navigator.main.Screens
 fun NotasListScreen(navController: NavHostController, globalProvider: GlobalProvider){
     var listaNotas by remember{ mutableStateOf(mutableListOf(nota1,nota2, nota3))}
     ListaNotas(lista = listaNotas,navController)
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .fillMaxHeight()
-//            .padding(10.dp)
-//    ) {
-//        // Nota 1
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(120.dp)
-//                .background(color = Color(0xDAF36D80))
-//        ) {
-//            Column(modifier = Modifier.padding(16.dp)) {
-//                Text(text = "Nota 1", fontWeight = FontWeight.Bold)
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Text(text = "Tarea: Investigar...")
-//            }
-//        }
-//        Spacer(modifier = Modifier.height(16.dp))
-//        // Nota 2
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(120.dp)
-//                .background(color = Color(0xC8F1E98A))
-//        ) {
-//            Column(modifier = Modifier.padding(16.dp)) {
-//                Text(text = "Nota 2", fontWeight = FontWeight.Bold)
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Text(text = "Comprar...")
-//            }
-//        }
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(modifier = Modifier.align(Alignment.End),
-//            onClick = { navController.navigate(Screens.NotaScreen.route) }) {
-//            Text(text = "NUEVA NOTA")
-//        }
-//    }
-
 }
 
 @Composable
@@ -108,15 +68,8 @@ val nota3 = Nota("Nota 3", "este es un ejemplo de la nota 3")
 
 data class Nota (
     var titulo: String = "",
-    var contenido: String = "",
-    var richTextValue: RichTextValue? = null
+    var contenido: String = ""
 ){
-    init {
-        if (!richTextValue?.value?.text.isNullOrEmpty()) {
-            contenido = richTextValue!!.value!!.text
-        }
-    }
-
     fun getResumen(): String{
         var text = contenido
         return if (text.length > 50) {
@@ -126,11 +79,3 @@ data class Nota (
         }
     }
 }
-//    var titulo = ""
-//    var resumen = ""
-//
-//    constructor(tit: String, res: String) {
-//        this.titulo = tit
-//        this.resumen = res
-//    }
-//}

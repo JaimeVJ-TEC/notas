@@ -1,6 +1,9 @@
 package com.tec.appnotas.ui.navigator.main
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
