@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.main.Graphs
 import com.tec.appnotas.ui.navigator.main.ScaffoldScreen
@@ -14,7 +15,6 @@ import com.tec.appnotas.ui.screens.notas.NotasListScreen
 import com.tec.appnotas.ui.screens.notas.editor.NotaScreen
 import com.tec.appnotas.ui.screens.opciones.OpcionesScreen
 import com.tec.appnotas.ui.navigator.main.SplashScreen
-import com.tec.appnotas.ui.screens.notas.Nota
 
 @Composable
 fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
@@ -31,7 +31,7 @@ fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
         }
 
         composable(route = Screens.NotaScreen.route){
-            NotaScreen(navController,globalProvider, Nota("Nota 1"))
+            NotaScreen(navController,globalProvider, nota = Nota(0,"asd","asd"))
         }
 
         composable(route = ScaffoldScreen.Archivo.route){

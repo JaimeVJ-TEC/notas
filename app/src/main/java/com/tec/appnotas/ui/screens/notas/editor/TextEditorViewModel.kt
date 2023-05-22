@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.sp
 import com.pointlessapps.rt_editor.model.RichTextValue
 import com.pointlessapps.rt_editor.model.Style
 import com.pointlessapps.rt_editor.ui.RichTextStyle
-import com.tec.appnotas.ui.screens.notas.Nota
+import com.tec.appnotas.domain.models.Nota
 
 class TextEditorViewModel(private val nota: Nota) : ViewModel() {
 
@@ -23,8 +23,8 @@ class TextEditorViewModel(private val nota: Nota) : ViewModel() {
     private var selectedRange = Pair(0,0)
 
     init{
-        _title.value = nota.titulo
-        _content.value = nota.contenido
+        _title.value = nota.title
+        _content.value = nota.content
     }
 
     fun updateTitle(title: String){

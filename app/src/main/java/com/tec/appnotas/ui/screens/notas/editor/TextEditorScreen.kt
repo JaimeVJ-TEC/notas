@@ -11,8 +11,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.ui.global.GlobalProvider
-import com.tec.appnotas.ui.screens.notas.Nota
 
 @Composable
 fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider, nota: Nota){
