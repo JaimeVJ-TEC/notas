@@ -14,6 +14,7 @@ interface NotaRepository {
     suspend fun getNota(id: String) : Nota
     suspend fun postNota(nota: Nota) : NotasResponseItem
     suspend fun getLocalNotas(archived: Boolean): Flow<List<Nota>>
+    suspend fun getNotaById(id: Int): Nota
     suspend fun insertLocalNota(nota: Nota) : Int
     suspend fun updateLocalNota(nota: Nota)
     suspend fun deleteLocalNota(nota: Nota)
@@ -39,6 +40,10 @@ class NotaRepositoryImp @Inject constructor(
 
     override suspend fun getLocalNotas(archived: Boolean): Flow<List<Nota>> {
         return notaDao.getArchivedNotas(archived)
+    }
+
+    override suspend fun getNotaById(id: Int): Nota {
+        return notaDao.getNotaById(id)
     }
 
     override suspend fun insertLocalNota(nota: Nota): Int {

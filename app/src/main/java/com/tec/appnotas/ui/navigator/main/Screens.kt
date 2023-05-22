@@ -14,7 +14,7 @@ const val ARGUMENT_NOTAID = "id"
 sealed class Screens(val route : String){
     object SplashScreen : Screens("splash_screen")
     object HomeScreen: Screens("NotasScreen")
-    object NotaScreen: Screens("NotaScreen")
+    object NotaScreen: Screens("NotaScreen/{id}")
 }
 
 sealed class ScaffoldScreen(val route : String,

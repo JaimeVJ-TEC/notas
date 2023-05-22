@@ -66,8 +66,9 @@ private fun onStyleButtonClick(richEditorComposeView: RichEditorComposeView, sty
 
 
 @Composable
-fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpdate: (String) -> Unit, context: Context) {
+fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpdate: (String) -> Unit, context: Context,text: String) {
     val context = LocalContext.current
+    var initialized = false
     val richEditorComposeView = remember {
         RichEditorComposeView(context).apply {
             // Customize the RichEditor settings here, e.g.:
@@ -75,6 +76,10 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
             editor.setEditorFontSize(14)
             editor.setOnTextChangeListener {
                 onContentUpdate(it)
+            }
+            if(!initialized) {
+                editor.html = text
+                initialized = true
             }
         }
     }

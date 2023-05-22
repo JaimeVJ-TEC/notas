@@ -19,6 +19,9 @@ interface NotaDao {
     @Query("SELECT * FROM notas")
     fun getAllNotas(): Flow<List<Nota>>
 
+    @Query("SELECT * FROM notas where notaId = :id")
+    fun getNotaById(id: Int): Nota
+
     @Query("SELECT * FROM notas WHERE archived = :archived")
     fun getArchivedNotas(archived: Boolean): Flow<List<Nota>>
 }

@@ -2,8 +2,10 @@ package com.tec.appnotas.ui.navigator.graphs
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.main.Graphs
@@ -30,8 +32,12 @@ fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
             NotasListScreen(navController, globalProvider)
         }
 
-        composable(route = Screens.NotaScreen.route){
-            NotaScreen(navController,globalProvider, nota = Nota(0,"asd","asd"))
+        composable(route = Screens.NotaScreen.route,
+            arguments = listOf(navArgument("id"){
+                type = NavType.IntType
+            })
+        ){
+            NotaScreen(navController,globalProvider, it.arguments!!.getInt("id"))
         }
 
         composable(route = ScaffoldScreen.Archivo.route){

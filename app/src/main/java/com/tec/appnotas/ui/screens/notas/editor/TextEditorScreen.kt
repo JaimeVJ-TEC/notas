@@ -10,18 +10,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.ui.global.GlobalProvider
 
 @Composable
-fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider, nota: Nota){
-    val editorVM = TextEditorViewModel(nota)
+fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider, id: Int){
+    val editorVM : TextEditorViewModel = hiltViewModel()
+    editorVM.getNota(id)
     Column(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .navigationBarsPadding().imePadding()
-            .fillMaxHeight()) {
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .navigationBarsPadding()
+        .imePadding()
+        .fillMaxHeight()) {
         editor(editorViewModel = editorVM)
     }
 
@@ -29,12 +32,13 @@ fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider,
 
 @Composable
 fun editor(editorViewModel: TextEditorViewModel){
-    val title = editorViewModel.title.collectAsState().value
+    val nota = editorViewModel.nota.collectAsState().value
     RichEditorCompose(
-        title,
+        nota.title,
         onContentUpdate = {editorViewModel.onContentChanged(it)},
         onTitleUpdate = {editorViewModel.updateTitle(it)},
-        LocalContext.current
+        LocalContext.current,
+        nota.content,
     )
 
 }
