@@ -1,4 +1,5 @@
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.util.AttributeSet
@@ -101,9 +102,13 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
         }
     }
 
-    val pickImageLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+    val pickImageLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
             Log.d("URI",uri.toString())
+            context.contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             onStyleButtonClick(richEditorComposeView,"insertImage",uri.toString())
         }
     }
@@ -129,7 +134,7 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
         )
         StyleButtonRow(items = Styles, selectedUpdate = {
             if(it == "insertImage"){
-                pickImageLauncher.launch("image/*")
+                pickImageLauncher.launch(arrayOf("image/*"))
             }
             else if(it == "insertPhoto"){
 //                val pathUri = Uri.fromFile(createImageFile(context))
