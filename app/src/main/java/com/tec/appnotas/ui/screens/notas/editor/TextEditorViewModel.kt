@@ -28,13 +28,15 @@ class TextEditorViewModel @Inject constructor(
     val nota: StateFlow<Nota> = _nota
 
     private var selectedRange = Pair(0,0)
-    private var initialized = false
+
+    private val _initialized = MutableStateFlow(false)
+    val initialized : StateFlow<Boolean> = _initialized
 
     fun getNota(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            if (!initialized) {
+            if (!_initialized.value) {
                 _nota.value = notaRepositoryImp.getNotaById(id)
-                initialized = true
+                _initialized.value = true
             }
         }
     }

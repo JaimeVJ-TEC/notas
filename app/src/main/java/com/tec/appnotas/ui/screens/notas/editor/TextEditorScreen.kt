@@ -18,14 +18,20 @@ import com.tec.appnotas.ui.global.GlobalProvider
 @Composable
 fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider, id: Int){
     val editorVM : TextEditorViewModel = hiltViewModel()
+    val initialized = editorVM.initialized.collectAsState().value
     editorVM.getNota(id)
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()
-        .navigationBarsPadding()
-        .imePadding()
-        .fillMaxHeight()) {
-        editor(editorViewModel = editorVM)
+
+    if(initialized) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .navigationBarsPadding()
+                .imePadding()
+                .fillMaxHeight()
+        ) {
+            editor(editorViewModel = editorVM)
+        }
     }
 
 }

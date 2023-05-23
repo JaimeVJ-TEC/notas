@@ -14,14 +14,16 @@ import com.tec.appnotas.data.constants.disabledGrey
 
 val Styles = listOf(
     SelectItem("bold","", Icons.Default.FormatBold,"Bold Text"),
-    SelectItem("italic","", Icons.Default.FormatItalic,"Bold Text"),
-    SelectItem("underline","", Icons.Default.FormatUnderlined,"Bold Text"),
-    SelectItem("strikethrough","", Icons.Default.FormatStrikethrough,"Bold Text"),
-    SelectItem("alignLeft","", Icons.Default.FormatAlignLeft,"Bold Text"),
-    SelectItem("alignCenter","", Icons.Default.FormatAlignCenter,"Bold Text"),
-    SelectItem("alignRight","", Icons.Default.FormatAlignRight,"Bold Text"),
-    SelectItem("setHeader","", Icons.Default.FormatSize,"Bold Text"),
-    SelectItem("setText","", Icons.Default.TextFields,"Bold Text")
+    SelectItem("italic","", Icons.Default.FormatItalic,"Italic Text"),
+    SelectItem("underline","", Icons.Default.FormatUnderlined,"Underline Text"),
+    SelectItem("strikethrough","", Icons.Default.FormatStrikethrough,"Strikethrough Text"),
+    SelectItem("alignLeft","", Icons.Default.FormatAlignLeft,"Align Left"),
+    SelectItem("alignCenter","", Icons.Default.FormatAlignCenter,"Align Center"),
+    SelectItem("alignRight","", Icons.Default.FormatAlignRight,"Align Right"),
+    SelectItem("setHeader","", Icons.Default.FormatSize,"Header"),
+    SelectItem("setText","", Icons.Default.TextFields,"Body"),
+    SelectItem("insertImage","",Icons.Default.NoteAdd,"InsertFile"),
+    SelectItem("insertPhoto","",Icons.Default.PhotoCamera,"TakePhoto")
 )
 
 @Composable
