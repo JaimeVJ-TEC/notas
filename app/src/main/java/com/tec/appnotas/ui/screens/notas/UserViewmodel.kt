@@ -36,11 +36,16 @@ class UserViewmodel @Inject constructor(
         return nota
     }
 
+    fun getNotaFromCode(id: String) {
+        viewModelScope.launch {
+            try {
+                val nota = notaRepositoryImp.getNota(id)
+                notaRepositoryImp.insertLocalNota(nota)
+            }
+            catch (e: Exception){
+                Log.d("LOL","LMAO, EVEN")
+            }
+        }
 
-//    fun getNota(id: String){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val nota = userRepositoryImp.getNota("eq.$id")
-//            Log.d("NOTA",nota.title)
-//        }
-//    }
+    }
 }

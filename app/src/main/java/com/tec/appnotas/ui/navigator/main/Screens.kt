@@ -15,6 +15,7 @@ sealed class Screens(val route : String){
     object SplashScreen : Screens("splash_screen")
     object HomeScreen: Screens("NotasScreen")
     object NotaScreen: Screens("NotaScreen/{id}")
+    object ScanScreen: Screens("ScanScreen")
 }
 
 sealed class ScaffoldScreen(val route : String,

@@ -1,35 +1,29 @@
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Environment
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import jp.wasabeef.richeditor.RichEditor
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
+import com.tec.appnotas.BuildConfig
 import com.tec.appnotas.ui.components.StyleButtonRow
 import com.tec.appnotas.ui.components.Styles
 import com.tec.appnotas.ui.screens.notas.editor.titleField
 import java.io.File
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class RichEditorComposeView @JvmOverloads constructor(
@@ -86,7 +80,8 @@ private fun onStyleButtonClick(richEditorComposeView: RichEditorComposeView, sty
 fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpdate: (String) -> Unit, context: Context,text: String) {
     val context = LocalContext.current
     var initialized = false
-    var path = ""
+    var uri = Uri.EMPTY
+
     val richEditorComposeView = remember {
         RichEditorComposeView(context).apply {
             // Customize the RichEditor settings here, e.g.:
@@ -112,14 +107,22 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
             onStyleButtonClick(richEditorComposeView,"insertImage",uri.toString())
         }
     }
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = {isSuccess: Boolean ->
-            if(isSuccess){
-            onStyleButtonClick(richEditorComposeView,"insertPhoto",path)
-            }
+
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+            onStyleButtonClick(richEditorComposeView,"insertImage",uri.toString())
         }
-    )
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     Column {
@@ -137,9 +140,21 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
                 pickImageLauncher.launch(arrayOf("image/*"))
             }
             else if(it == "insertPhoto"){
-//                val pathUri = Uri.fromFile(createImageFile(context))
-//                path = pathUri.toString()
-//                cameraLauncher.launch(pathUri)
+
+                val file = context.createImageFile()
+                uri = FileProvider.getUriForFile(
+                    Objects.requireNonNull(context),
+                    BuildConfig.APPLICATION_ID + ".provider", file
+                )
+                val permissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                    cameraLauncher.launch(uri)
+                } else {
+                    // Request a permission
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+
             }
             else{
                 onStyleButtonClick(richEditorComposeView, it)
@@ -148,13 +163,13 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
     }
 }
 
-//fun createImageFile(context: Context): File {
-//    // Create an image file name
-//    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-//    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-//    return File.createTempFile(
-//        "JPEG_${timeStamp}_", //prefix
-//        ".jpg", //suffix
-//        storageDir //directory
-//    )
-//}
+fun Context.createImageFile(): File {
+    // Create an image file name
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    val imageFileName = "JPEG_" + timeStamp + "_"
+    return File.createTempFile(
+        imageFileName, /* prefix */
+        ".jpg", /* suffix */
+        externalCacheDir      /* directory */
+    )
+}

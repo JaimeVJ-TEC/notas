@@ -17,6 +17,7 @@ import com.tec.appnotas.ui.screens.notas.NotasListScreen
 import com.tec.appnotas.ui.screens.notas.editor.NotaScreen
 import com.tec.appnotas.ui.screens.opciones.OpcionesScreen
 import com.tec.appnotas.ui.navigator.main.SplashScreen
+import com.tec.appnotas.ui.screens.notas.scanner.ScanScreen
 
 @Composable
 fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
@@ -38,6 +39,10 @@ fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
             })
         ){
             NotaScreen(navController,globalProvider, it.arguments!!.getInt("id"))
+        }
+
+        composable(route = Screens.ScanScreen.route){
+            ScanScreen(globalProvider = globalProvider, navHostController = navController)
         }
 
         composable(route = ScaffoldScreen.Archivo.route){

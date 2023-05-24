@@ -1,6 +1,11 @@
 package com.tec.appnotas.ui.screens.notas
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.text.Html
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,13 +14,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import com.tec.appnotas.domain.models.Nota
@@ -33,6 +41,18 @@ fun NotasListScreen(navController: NavHostController, globalProvider: GlobalProv
 @Composable
 fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvider: GlobalProvider) {
     val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+    ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            navController.navigate(Screens.ScanScreen.route)
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn() {
@@ -70,6 +90,17 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                 navController.navigate(route = "NotaScreen/${nota.notaId}")
             }
         }
+
+        QRButton(modifier = Modifier.align(Alignment.BottomStart)){
+            val permissionCheckResult =
+                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                navController.navigate(Screens.ScanScreen.route)
+            } else {
+                // Request a permission
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
     }
 
 }
@@ -95,26 +126,29 @@ fun AddButton(modifier: Modifier,onClick: () -> Unit) {
     }
 }
 
-//val nota1 = Nota("Nota 1", "este es un ejemplo de la nota 2")
-//val nota2 = Nota("Nota 2", "este es un ejemplo de la nota 2")
-//val nota3 = Nota("Nota 3", "este es un ejemplo de la nota 3")
-//
-//data class Nota (
-//    var titulo: String = "",
-//    var contenido: String = ""
-//){
-//    fun getResumen(): String{
-//        var text = contenido
-//        return if (text.length > 50) {
-//            text.substring(0, 50)
-//        } else {
-//            text
-//        }
-//    }
-//}
+@Composable
+fun QRButton(modifier: Modifier,onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = onClick,
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = MaterialTheme.colors.onPrimary,
+        modifier = modifier
+            .padding(16.dp)
+            .size(56.dp)
+            .shadow(4.dp, CircleShape)
+            .clip(CircleShape)
+            .background(MaterialTheme.colors.surface)
+    ) {
+        Icon(
+            imageVector = Icons.Default.QrCodeScanner,
+            contentDescription = "Scan QR Code",
+            modifier = Modifier.size(24.dp)
+        )
+    }
+}
 
 fun getResumen(contenido: String): String{
-    var text = HtmlCompat.fromHtml(contenido,HtmlCompat.FROM_HTML_MODE_LEGACY).toString().replace("\n", "").replace("\r", "");
+    var text = HtmlCompat.fromHtml(contenido.replace(Regex("<img[^>]*>"), ""),HtmlCompat.FROM_HTML_MODE_LEGACY).toString().replace("\n", "").replace("\r", "");
     return if (text.length > 50) {
         text.substring(0, 50)
     } else {
