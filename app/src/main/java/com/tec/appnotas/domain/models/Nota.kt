@@ -9,5 +9,5 @@ data class Nota(
     var notaId: Int = 0,
     val title: String = "",
     val content: String = "",
-    val archived: Boolean = false
+    var archived: Boolean = false
 )

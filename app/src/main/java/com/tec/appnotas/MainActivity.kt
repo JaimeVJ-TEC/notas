@@ -9,10 +9,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.tec.appnotas.domain.datasource.UserStore
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.graphs.RootGraph
 import com.tec.appnotas.ui.screens.notas.UserViewmodel
@@ -24,18 +27,24 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppnotasTheme {
+            val store = UserStore(LocalContext.current)
+            val navController = rememberNavController()
+            val userVM : UserViewmodel = hiltViewModel()
+
+            val gp = GlobalProvider(
+                nav = navController,
+                userVM,
+                store
+            )
+
+            val darkmode = gp.dataStore.getDarkModeValue.collectAsState(initial = false).value
+
+            AppnotasTheme(darkTheme = darkmode) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
-                    val userVM : UserViewmodel = hiltViewModel()
-                    val gp = GlobalProvider(
-                        nav = navController,
-                        userVM
-                    )
                     RootGraph(globalProvider = gp)
                 }
             }

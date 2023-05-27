@@ -13,7 +13,7 @@ import javax.inject.Inject
 interface NotaRepository {
     suspend fun getNota(id: String) : Nota
     suspend fun postNota(nota: Nota) : NotasResponseItem
-    suspend fun getLocalNotas(archived: Boolean): Flow<List<Nota>>
+    fun getLocalNotas(archived: Boolean): Flow<List<Nota>>
     suspend fun getNotaById(id: Int): Nota
     suspend fun insertLocalNota(nota: Nota) : Int
     suspend fun updateLocalNota(nota: Nota)
@@ -27,8 +27,10 @@ class NotaRepositoryImp @Inject constructor(
 ) : NotaRepository{
 
     override suspend fun getNota(id: String): Nota {
-        val response = dataSource.getNotaById(id)
-        return Nota(notaId = -1, content = response[0].content,title = response[0].title)
+        val response = dataSource.getNotaById("eq.$id")
+        Log.d("ID",id)
+        Log.d("RESPONSE",response[0].title)
+        return Nota(content = response[0].content,title = response[0].title)
     }
 
     override suspend fun postNota(nota: Nota): NotasResponseItem {
@@ -38,7 +40,7 @@ class NotaRepositoryImp @Inject constructor(
         return response[0]
     }
 
-    override suspend fun getLocalNotas(archived: Boolean): Flow<List<Nota>> {
+    override fun getLocalNotas(archived: Boolean): Flow<List<Nota>> {
         return notaDao.getArchivedNotas(archived)
     }
 

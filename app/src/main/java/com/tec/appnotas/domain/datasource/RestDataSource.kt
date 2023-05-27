@@ -17,7 +17,7 @@ interface RestDataSource {
 
     @Headers("apikey: $ACCESS_TOKEN","Prefer: return=representation")
     @POST("rest/v1/notas")
-    suspend fun postNota(nota: PostItem): NotasResponse
+    suspend fun postNota(@Body nota: PostItem): NotasResponse
 
     @Headers("Authorization: Bearer $ACCESS_TOKEN")
     @GET("/storage/v1/object/{Key}")

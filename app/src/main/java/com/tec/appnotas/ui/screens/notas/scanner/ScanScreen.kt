@@ -26,8 +26,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.tec.appnotas.ui.global.GlobalProvider
+import com.tec.appnotas.ui.navigator.main.ScaffoldScreen
+import com.tec.appnotas.ui.navigator.main.Screens
 import com.tec.appnotas.ui.screens.notas.UserViewmodel
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -38,42 +44,57 @@ fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostControl
     }
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    var detected by remember { mutableStateOf(false)}
+    if(detected){
+        Log.d("ASD","ASDSDASDADA")
+        Log.d("ASD","ASDSDASDADA")
+        Log.d("ASD","ASDSDASDADA")
+        Log.d("ASD","ASDSDASDADA")
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         AndroidView(
-            factory = {context ->
-            val previewView = PreviewView(context)
-            val preview = Preview.Builder().build()
-            val selector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-            preview.setSurfaceProvider(previewView.surfaceProvider)
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setTargetResolution(Size(previewView.width,previewView.height))
-                .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-            imageAnalysis.setAnalyzer(
-                ContextCompat.getMainExecutor(context),
-                CodeAnalyzer{ result->
-                    Log.d("CODE",result)
-                    globalProvider.userVM.getNotaFromCode(result)
-                    navHostController.popBackStack()
-                }
-            )
-            try{
-                cameraProviderFuture.get().bindToLifecycle(
-                    lifecycleOwner,
-                    selector,
-                    preview,
-                    imageAnalysis
+            factory = { context ->
+                val previewView = PreviewView(context)
+                val preview = Preview.Builder().build()
+                val selector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build()
+                preview.setSurfaceProvider(previewView.surfaceProvider)
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setTargetResolution(Size(previewView.width, previewView.height))
+                    .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                imageAnalysis.setAnalyzer(
+                    ContextCompat.getMainExecutor(context),
+                    BarcodeAnalyzer { result ->
+                        try {
+                            globalProvider.userVM.getNotaFromCode(result.rawValue.toString())
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                        }
+                        finally {
+                            detected = true
+                            navHostController.popBackStack(ScaffoldScreen.Home.route,false,false)
+                        }
+                    }
                 )
-            } catch(e: Exception){
-                e.printStackTrace()
-            }
-            previewView
-        },
-        modifier = Modifier.weight(1f))
+                try {
+                    cameraProviderFuture.get().bindToLifecycle(
+                        lifecycleOwner,
+                        selector,
+                        preview,
+                        imageAnalysis
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                previewView
+            },
+            modifier = Modifier.weight(1f)
+        )
 
     }
 

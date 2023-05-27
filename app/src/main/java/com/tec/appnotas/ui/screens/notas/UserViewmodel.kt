@@ -1,51 +1,77 @@
 package com.tec.appnotas.ui.screens.notas
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.domain.repository.NotaRepository
-import com.tec.appnotas.domain.repository.NotaRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import net.glxn.qrgen.android.QRCode
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewmodel @Inject constructor(
     private val notaRepositoryImp: NotaRepository
 ) : ViewModel(){
-    private val _listaNotas = MutableStateFlow<List<Nota>>(listOf())
-    val listaNotas: StateFlow<List<Nota>> = _listaNotas
+    val listaNotas: Flow<List<Nota>> = notaRepositoryImp.getLocalNotas(false)
+    val listaNotasArchived: Flow<List<Nota>> = notaRepositoryImp.getLocalNotas(true)
+
+    private var inserting = false
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            notaRepositoryImp.getLocalNotas(false)
-                .collect { notas ->
-                    _listaNotas.value = notas
-                }
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            notaRepositoryImp.getLocalNotas(false)
+//                .collect { notas ->
+//                    _listaNotas.value = notas
+//                }
+//        }
     }
 
-    suspend fun insertNota(): Nota{
-        var nota = Nota()
+    suspend fun insertNota(nota: Nota): Nota{
         nota.notaId = notaRepositoryImp.insertLocalNota(nota)
         Log.d("NOTA",nota.notaId.toString())
         return nota
     }
 
     fun getNotaFromCode(id: String) {
-        viewModelScope.launch {
-            try {
+        if(!inserting) {
+            inserting = true
+            viewModelScope.launch {
+                Log.d("TEST", "TEST1")
                 val nota = notaRepositoryImp.getNota(id)
-                notaRepositoryImp.insertLocalNota(nota)
-            }
-            catch (e: Exception){
-                Log.d("LOL","LMAO, EVEN")
+                insertNota(nota)
+                inserting = false
             }
         }
-
     }
+
+    fun archiveNota(id: Int, archive: Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            var nota = notaRepositoryImp.getNotaById(id)
+            nota.archived = archive
+            notaRepositoryImp.updateLocalNota(nota)
+        }
+    }
+
+    fun deleteNota(id: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            var nota = notaRepositoryImp.getNotaById(id)
+            notaRepositoryImp.deleteLocalNota(nota)
+        }
+    }
+
+    suspend fun shareNota(id: Int): Bitmap{
+        var nota = notaRepositoryImp.getNotaById(id)
+        var response = notaRepositoryImp.postNota(nota)
+        return QRCode.from(response.id).withSize(500,500).bitmap()
+    }
+}
+
+enum class UserVMState{
+    CONNECTION_ERROR,
+    LOADING
 }

@@ -1,4 +1,5 @@
 import android.Manifest
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,15 +10,21 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import jp.wasabeef.richeditor.RichEditor
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import com.tec.appnotas.BuildConfig
 import com.tec.appnotas.ui.components.StyleButtonRow
 import com.tec.appnotas.ui.components.Styles
@@ -79,6 +86,7 @@ private fun onStyleButtonClick(richEditorComposeView: RichEditorComposeView, sty
 @Composable
 fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpdate: (String) -> Unit, context: Context,text: String) {
     val context = LocalContext.current
+    val theme = MaterialTheme.colors
     var initialized = false
     var uri = Uri.EMPTY
 
@@ -87,6 +95,7 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
             // Customize the RichEditor settings here, e.g.:
             editor.setEditorHeight(200)
             editor.setEditorFontSize(14)
+
             editor.setOnTextChangeListener {
                 onContentUpdate(it)
             }
@@ -109,8 +118,13 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
     }
 
     val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-            onStyleButtonClick(richEditorComposeView,"insertImage",uri.toString())
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {result ->
+            if(result != null && result) {
+                onStyleButtonClick(richEditorComposeView, "insertImage", uri.toString())
+            }
+            else{
+                context.contentResolver.delete(uri,null,null)
+            }
         }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -125,8 +139,9 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
     }
 
 
-    Column {
+    Column(modifier = Modifier.background(Color.White)) {
         titleField(title = title) { onTitleUpdate(it) }
+        Divider()
         Spacer(modifier = Modifier.height(5.dp))
         AndroidView(
             factory = { richEditorComposeView },
