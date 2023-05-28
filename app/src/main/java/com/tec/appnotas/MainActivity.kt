@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tec.appnotas.domain.datasource.UserStore
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.graphs.RootGraph
+import com.tec.appnotas.ui.screens.calendario.CalendarioViewModel
 import com.tec.appnotas.ui.screens.notas.UserViewmodel
 import com.tec.appnotas.ui.theme.AppnotasTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,10 +31,12 @@ class MainActivity : ComponentActivity() {
             val store = UserStore(LocalContext.current)
             val navController = rememberNavController()
             val userVM : UserViewmodel = hiltViewModel()
+            val calendarioVM : CalendarioViewModel = hiltViewModel()
 
             val gp = GlobalProvider(
                 nav = navController,
                 userVM,
+                calendarioVM,
                 store
             )
 

@@ -7,6 +7,6 @@ import com.tec.appnotas.domain.models.Event
 
 @Database(entities = [Event::class], version = 1)
 abstract class EventoDatabase : RoomDatabase() {
-    abstract val dao : EventoDao
+    abstract val eventoDao : EventoDao
 }
 

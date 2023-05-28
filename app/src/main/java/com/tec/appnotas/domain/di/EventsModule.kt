@@ -2,15 +2,12 @@ package com.tec.appnotas.domain.di
 
 import android.content.Context
 import androidx.room.Room
+import com.tec.appnotas.domain.dao.EventoDao
 import com.tec.appnotas.domain.dao.ImagenDao
 import com.tec.appnotas.domain.dao.NotaDao
+import com.tec.appnotas.domain.datasource.EventoDatabase
 import com.tec.appnotas.domain.datasource.NotasDatabase
 import com.tec.appnotas.domain.datasource.RestDataSource
-import com.tec.appnotas.domain.repository.EventRepository
-import com.tec.appnotas.domain.repository.EventRepositoryImp
-import com.tec.appnotas.domain.repository.NotaRepository
-import com.tec.appnotas.domain.repository.NotaRepositoryImp
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,13 +20,18 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class RepositoryModule{
-
+class EventsModule{
+    @Provides
+    fun provideEventDao(eventoDatabase: EventoDatabase): EventoDao {
+        return eventoDatabase.eventoDao
+    }
+    @Provides
     @Singleton
-    @Binds
-    abstract fun notasRepository(repo: NotaRepositoryImp): NotaRepository
-
-    @Singleton
-    @Binds
-    abstract fun eventsRepository(repo: EventRepositoryImp): EventRepository
+    fun provideEventsDatabase(@ApplicationContext appContext: Context): EventoDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            EventoDatabase::class.java,
+            "eventos_database"
+        ).build()
+    }
 }

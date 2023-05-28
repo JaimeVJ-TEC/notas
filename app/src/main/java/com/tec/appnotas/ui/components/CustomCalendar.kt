@@ -41,6 +41,9 @@ import java.util.Locale
 @Composable
 fun MiCalendario(viewModel: CalendarioViewModel) {
 
+    //EN CUALQUIER PARTE DONDE AGREGES O MODIFIQUES EVENTOS LLAMA EMTODOS DE CALENDARIO VIEWMODEL
+
+    //CAMBIA A COLLECT STATE DEL VIEWMODEL
     val events = viewModel.events // Define una lista mutable para los eventos
 
     var currentMonth by remember { mutableStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
@@ -159,7 +162,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             if (eventTitle == "" || eventBody == ""){
                                 showDialog = false
                             }else{
-                               events.add(Event("Titulo: $eventTitle", "Descripcion: $eventBody", selectedDay, currentMonth))
+                                events.add(Event(title = "Titulo: $eventTitle", eventBody = "Descripcion: $eventBody", selectedDay = selectedDay, currentMonth = currentMonth))
                             }
 
                             eventTitle = ""
