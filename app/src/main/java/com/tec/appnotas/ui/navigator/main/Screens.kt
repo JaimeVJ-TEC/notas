@@ -4,10 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-
-
 
 const val ARGUMENT_NOTAID = "id"
 
@@ -46,6 +45,12 @@ sealed class ScaffoldScreen(val route : String,
         title = " Opciones",
         icon = Icons.Default.Settings
     )
+
+    object Acerca: ScaffoldScreen(
+        route = "Acerca",
+        title = " Acerca de la App",
+        icon = Icons.Default.Info
+    )
 }
 
 sealed class Graphs(val route: String){
@@ -54,5 +59,6 @@ sealed class Graphs(val route: String){
     object ListaGraph: Graphs("ListaGraph")
     object OpcionesGraph: Graphs("OpcionesGraph")
     object ArchivoGraph: Graphs("ArchivoGraph")
-    object Calendario: Graphs("CalendarioGraph")
+    object CalendarioGraph: Graphs("CalendarioGraph")
+
 }

@@ -64,11 +64,6 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
-    //Caledario
-    implementation "io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0"
-    // separate artifact with utilities for working with kotlinx-datetime
-    implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0"
-
     //RichTextField
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
     implementation "com.github.pChochura:richtext-compose:1.2.2"

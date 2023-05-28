@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 fun HomeScreenContainer(navController: NavHostController = rememberNavController(), globalProvider: GlobalProvider){
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    var currentItem by remember { mutableStateOf("Simple Notes (-°◡°)")}
+    var currentItem by remember { mutableStateOf("Simple Notes (-•◡•)")}
 
     Scaffold(
         scaffoldState = scaffoldState,

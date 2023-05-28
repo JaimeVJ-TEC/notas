@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tec.appnotas.domain.models.Event
 import com.tec.appnotas.domain.models.Nota
+import com.tec.appnotas.domain.repository.EventRepository
 import com.tec.appnotas.domain.repository.NotaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,7 @@ class UserViewmodel @Inject constructor(
 ) : ViewModel(){
     val listaNotas: Flow<List<Nota>> = notaRepositoryImp.getLocalNotas(false)
     val listaNotasArchived: Flow<List<Nota>> = notaRepositoryImp.getLocalNotas(true)
-
+    //val listaEventos: Flow<List<Event>> = EventRepository.getEventos()
     private var inserting = false
 
     init {

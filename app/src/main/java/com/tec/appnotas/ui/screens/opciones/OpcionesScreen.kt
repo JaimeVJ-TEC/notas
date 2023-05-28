@@ -1,27 +1,22 @@
 package com.tec.appnotas.ui.screens.opciones
 
-import android.content.res.Resources
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Article
-import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.NightlightRound
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tec.appnotas.ui.global.GlobalProvider
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun OpcionesScreen(
@@ -37,6 +32,17 @@ fun OpcionesScreen(
         modifier = Modifier
             .fillMaxSize()
     ){
+        Row(modifier = Modifier.padding(15.dp)) {
+            Column {
+                Text(
+                    text = "Configura Simple Notes. " +
+                            "\n -🌓 Modo oscuro: Cambia el tema de la aplicacion para descansar tu vista en ambientes con poca luz. " +
+                            "\n -👓 Vista Previa: Muestra u oculta el cuerpo de las notas, añade privacidad extra!",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily.SansSerif
+                )
+            }
+        }
         RowOpcion(title = "Modo oscuro", checked = valorModoOscuro){
             coroutineScope.launch {
                 globalProvider.dataStore.saveDarkModeValue(it)
