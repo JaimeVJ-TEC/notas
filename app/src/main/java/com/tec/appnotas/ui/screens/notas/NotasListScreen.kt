@@ -14,11 +14,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -28,9 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -62,6 +66,7 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
     val showDialog = remember { mutableStateOf(false) }
     val saveBitmap = remember { mutableStateOf<Bitmap?>(null) }
     val context = LocalContext.current
+    val density = LocalDensity.current
 
     var LaunchScan by remember { mutableStateOf(false)}
 
@@ -88,37 +93,47 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
 
         //LAZY COLUMN CON LAS NOTAS NO ARCHIVADAS
         LazyColumn() {
-            item {
+            item() {
                 lista.forEach { item ->
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .combinedClickable(
-                                onClick = { navController.navigate(route = "NotaScreen/${item.notaId}") },
-                                onLongClick = {
-                                    activeItem.value = item.notaId; Log.d(
-                                    "ACTIVEITEM",
-                                    item.notaId.toString()
-                                )
-                                    showButtons = true
-                                }
-                            )
-                    ) {
-                        Column() {
-                            Row {
-                                Box(
-                                    modifier = Modifier
-                                        .background(color = androidx.compose.ui.graphics.Color.Green)
-                                        .height(10.dp)
-                                        .width(10.dp)
-                                )
-                                Spacer(modifier = Modifier.width(20.dp))
-                                Text(text = item.title, fontSize = 20.sp)
+                    Box(modifier = Modifier.background(
+                            if(activeItem.value != null && item.notaId == activeItem.value){
+                                MaterialTheme.colors.secondaryVariant
                             }
-                            Text(text = getResumen(item.content), fontSize = 13.sp)
+                            else{
+                                MaterialTheme.colors.surface
+                            })) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .combinedClickable(
+                                    onClick = { navController.navigate(route = "NotaScreen/${item.notaId}") },
+                                    onLongClick = {
+                                        if(activeItem.value != null && activeItem.value == item.notaId){
+                                            activeItem.value = null
+                                            showButtons = false
+                                        }
+                                        else {
+                                            activeItem.value = item.notaId;
+                                            showButtons = true
+                                        }
+                                    }
+                                )
+                        ) {
+                            Column() {
+                                Row {
+                                    Box(
+                                        modifier = Modifier
+                                            .background(color = androidx.compose.ui.graphics.Color.Green)
+                                            .height(10.dp)
+                                            .width(10.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                    Text(text = item.title, fontSize = 20.sp)
+                                }
+                                Text(text = getResumen(item.content), fontSize = 13.sp)
+                            }
                         }
                     }
                     Divider()
@@ -155,8 +170,17 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                 }
             }
 
-            //LOS BOTONES DE ARCHIVAR, ELIMINAR Y COMPARTIR
-            if(showButtons && activeItem.value != null) {
+            AnimatedVisibility(
+                visible = showButtons && activeItem.value != null,
+                enter = slideInVertically {
+                    with(density) { 40.dp.roundToPx() }
+                } + expandVertically(
+                    expandFrom = Alignment.Bottom
+                ) + fadeIn(
+                    initialAlpha = 0.3f
+                ),
+                exit = slideOutVertically() + shrinkVertically() + fadeOut()
+            ) {
                 BottomRow(
                     modifier = Modifier.fillMaxWidth(),
                     onShareClick =
@@ -176,12 +200,17 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                     onDeleteClick =
                     {
                         globalProvider.userVM.deleteNota(activeItem.value!!)
+                        activeItem.value = null
+                        showButtons = false
                     },
                     onArchiveClick =
                     {
                         globalProvider.userVM.archiveNota(activeItem.value!!,true)
+                        activeItem.value = null
+                        showButtons = false
                     }
                 )
+
             }
         }
 
@@ -200,20 +229,41 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
 //LOS BOTONES DE ARCHIVAR, ELIMINAR Y COMPARTIR
 @Composable
 fun BottomRow(modifier: Modifier, onShareClick: () -> Unit, onDeleteClick: () -> Unit, onArchiveClick: () -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .wrapContentHeight()
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colors.surface),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        Button(onClick = onShareClick, modifier = Modifier.weight(1f)) {
-            Text("Share")
+        Button(
+            onClick = onShareClick,
+            shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = "Compartir", color = MaterialTheme.colors.onSurface)
         }
-        Button(onClick = onDeleteClick, modifier = Modifier.weight(1f)) {
-            Text("Delete")
+
+        Button(
+            onClick = onDeleteClick,
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = "Eliminar", color = MaterialTheme.colors.onError)
         }
-        Button(onClick = onArchiveClick, modifier = Modifier.weight(1f)) {
-            Text("Archive")
+
+        Button(
+            onClick = onArchiveClick,
+            shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = "Archivar", color = MaterialTheme.colors.onSurface)
         }
     }
 }
