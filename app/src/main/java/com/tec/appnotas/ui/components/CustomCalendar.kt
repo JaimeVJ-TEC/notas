@@ -44,7 +44,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
     //EN CUALQUIER PARTE DONDE AGREGES O MODIFIQUES EVENTOS LLAMA EMTODOS DE CALENDARIO VIEWMODEL
 
     //CAMBIA A COLLECT STATE DEL VIEWMODEL
-    val events = viewModel.events // Define una lista mutable para los eventos
+    val events = viewModel.events.collectAsState(initial = listOf()).value // Define una lista mutable para los eventos
 
     var currentMonth by remember { mutableStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
     var currentYear by remember { mutableStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
@@ -162,7 +162,13 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             if (eventTitle == "" || eventBody == ""){
                                 showDialog = false
                             }else{
-                                events.add(Event(title = "Titulo: $eventTitle", eventBody = "Descripcion: $eventBody", selectedDay = selectedDay, currentMonth = currentMonth))
+                                viewModel.insertEvento(
+                                    Event(
+                                        title = "Titulo: $eventTitle",
+                                        eventBody = "Descripcion: $eventBody",
+                                        selectedDay = selectedDay,
+                                        currentMonth = currentMonth
+                                    ))
                             }
 
                             eventTitle = ""
@@ -188,7 +194,9 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
 
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
-                modifier = Modifier.fillMaxWidth().padding(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
                 onClick = {
                     showEvents = true },
             ) {

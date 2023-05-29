@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface EventRepository {
-    suspend fun getAllEvents(): Flow<List<Event>>
+    fun getAllEvents(): Flow<List<Event>>
     suspend fun getEventById(id: Int): Event
     suspend fun insertLocalEvent(event: Event) : Int
     suspend fun updateLocalEvent(event: Event)
@@ -17,7 +17,7 @@ interface EventRepository {
 class EventRepositoryImp @Inject constructor(
     private val eventoDao: EventoDao
 ) : EventRepository{
-    override suspend fun getAllEvents(): Flow<List<Event>> {
+    override fun getAllEvents(): Flow<List<Event>> {
         return  eventoDao.getAllEventos()
     }
 
