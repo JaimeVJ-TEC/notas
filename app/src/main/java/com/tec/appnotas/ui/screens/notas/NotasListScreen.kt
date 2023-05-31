@@ -66,6 +66,8 @@ fun NotasListScreen(navController: NavHostController, globalProvider: GlobalProv
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvider: GlobalProvider) {
+    val showDescription = globalProvider.dataStore.getDescriptionValue.collectAsState(initial = true).value
+
     val coroutineScope = rememberCoroutineScope()
     val activeItem = remember { mutableStateOf<Int?>(null) }
     var showButtons by remember { mutableStateOf(false )}
@@ -74,7 +76,7 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
     val context = LocalContext.current
     val density = LocalDensity.current
     var LaunchScan by remember { mutableStateOf(false)}
-
+    
     //PERMISOS PARA LA CAMARA, SI SE DAN PERMISOS ENTONCES SE NAVEGA A LA PANTALLA DE ESCANEO
     val permissionLauncher = rememberLauncherForActivityResult(
     ActivityResultContracts.RequestPermission()
@@ -143,7 +145,9 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                                         Text(text = item.title, fontSize = 20.sp)
                                     }
                                     //poner un if para la vista previa
-                                    Text(text = getResumen(item.content), fontSize = 13.sp)
+                                    if(showDescription) {
+                                        Text(text = getResumen(item.content), fontSize = 13.sp)
+                                    }
                                 }
                             }
                         }
