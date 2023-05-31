@@ -212,7 +212,6 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = 8.dp,
-            backgroundColor = Color.White,
         ) {
             Column(modifier = Modifier.padding(16.dp))
             {
