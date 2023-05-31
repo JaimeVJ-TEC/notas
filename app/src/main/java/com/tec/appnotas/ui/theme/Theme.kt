@@ -8,16 +8,18 @@ import androidx.compose.runtime.Composable
 import com.tec.appnotas.data.constants.DarkTopBarColor
 import com.tec.appnotas.data.constants.TopBarColor
 
+//Variante oscura
 private val DarkColorPalette = darkColors(
     primary = DarkTopBarColor,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primaryVariant = GrisSelectedOscuro,
+    secondary = AzulOscuro
 )
 
+//Variante clara
 private val LightColorPalette = lightColors(
     primary = TopBarColor,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primaryVariant = GrisSelectedClaro,
+    secondary = AzulClaro
 
     /* Other default colors to override
     background = Color.White,

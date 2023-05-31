@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +28,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(key1 = true) {
-        delay(3000)
+        delay(1500)
         navController.popBackStack() //Para borrar el registro de navegacion, sirve para que no se pueda ir de nuevo hacia atras < o
         navController.navigate(route = ScaffoldScreen.Home.route)
     }
@@ -41,7 +42,7 @@ fun Splash() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Simple Notes", fontSize = 30.sp, modifier = Modifier.padding(bottom = 20.dp))
+        Text(text = "Simple Notes", fontSize = 30.sp, modifier = Modifier.padding(bottom = 20.dp),style = MaterialTheme.typography.h2)
         Image(
             painter = painterResource(id = R.drawable.splash),
             contentDescription = "LogoSplash",
@@ -52,7 +53,8 @@ fun Splash() {
             text = "Powered by Android",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Green
+            color = Color.Green,
+            style = MaterialTheme.typography.h2
         )
     }
 }

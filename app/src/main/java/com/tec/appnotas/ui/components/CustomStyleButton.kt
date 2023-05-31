@@ -54,7 +54,6 @@ fun StyleButton(
     item: SelectItem,
     onClick: () -> Unit
 ) {
-
     IconButton(
         onClick = { onClick() },
         modifier = Modifier

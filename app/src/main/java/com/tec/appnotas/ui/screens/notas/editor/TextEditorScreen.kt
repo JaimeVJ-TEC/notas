@@ -4,8 +4,11 @@ import RichEditorCompose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -14,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.tec.appnotas.domain.models.Nota
+import com.tec.appnotas.data.constants.LibretaTopColor
 import com.tec.appnotas.ui.global.GlobalProvider
 
 @Composable
@@ -35,7 +38,6 @@ fun NotaScreen(navController: NavHostController, globalProvider: GlobalProvider,
             editor(editorViewModel = editorVM)
         }
     }
-
 }
 
 @Composable
@@ -48,23 +50,32 @@ fun editor(editorViewModel: TextEditorViewModel){
         LocalContext.current,
         nota.content,
     )
-
 }
+
 
 @Composable
-fun titleField(title: String, onTitleChange: (String) -> Unit){
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)
-    ){
+fun titleField(title: String, onTitleChange: (String) -> Unit) {
+    val focusRequester = remember { FocusRequester() }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(MaterialTheme.colors.background)
+    ) {
         TextField(
             value = title,
-            onValueChange = {onTitleChange(it)},
+            onValueChange = { onTitleChange(it) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
-            textStyle = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold, color= Color.Black),
-            maxLines = 1
+                .height(80.dp)
+                .focusRequester(focusRequester),
+            maxLines = 1,
         )
+        DisposableEffect(Unit) {
+            focusRequester.requestFocus()
+            onDispose { }
+        }
     }
 }
+
+

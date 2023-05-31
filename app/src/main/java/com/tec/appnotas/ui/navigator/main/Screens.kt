@@ -1,12 +1,6 @@
 package com.tec.appnotas.ui.navigator.main
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.tec.appnotas.R
 
 const val ARGUMENT_NOTAID = "id"
 
@@ -19,37 +13,37 @@ sealed class Screens(val route : String){
 
 sealed class ScaffoldScreen(val route : String,
                             val title: String,
-                            val icon: ImageVector
+                            val icon: Int
 ){
 
     object Home: ScaffoldScreen(
         route = "Notas",
         title = " Notas",
-        icon = Icons.Default.Home
+        R.drawable.notesicon
     )
 
     object Archivo: ScaffoldScreen(
         route = "Archivo",
         title = " Archivo",
-        icon = Icons.Default.AccountBox
+        R.drawable.clipicon
     )
 
     object Calendario: ScaffoldScreen(
         route = "Calendario",
         title = " Calendario",
-        icon = Icons.Default.DateRange
+        R.drawable.calendaricon
     )
 
     object Opciones: ScaffoldScreen(
         route = "Opciones",
         title = " Opciones",
-        icon = Icons.Default.Settings
+        R.drawable.toolicon
     )
 
     object Acerca: ScaffoldScreen(
         route = "Acerca",
         title = " Acerca de la App",
-        icon = Icons.Default.Info
+        R.drawable.abouticon
     )
 }
 

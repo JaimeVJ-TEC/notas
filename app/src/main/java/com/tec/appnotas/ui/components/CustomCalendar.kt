@@ -1,5 +1,6 @@
 package com.tec.appnotas.ui.components
 
+import android.content.res.Resources.Theme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,18 +23,23 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.tec.appnotas.domain.dao.EventoDao
 import com.tec.appnotas.ui.screens.calendario.CalendarioViewModel
 import com.tec.appnotas.domain.models.Event
+import com.tec.appnotas.ui.theme.AzulClaro
 import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Locale
@@ -108,7 +114,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                     if (dayOfMonth < 1 || dayOfMonth > daysInMonth) {
                         Box(modifier = Modifier.weight(1f))
                     } else {
-                        val dayColor = if (dayOfMonth == selectedDay && currentMonth == Calendar.getInstance().get(Calendar.MONTH) && currentYear == Calendar.getInstance().get(Calendar.YEAR)) Color.Cyan else Color.Unspecified
+                        val dayColor = if (dayOfMonth == selectedDay && currentMonth == Calendar.getInstance().get(Calendar.MONTH) && currentYear == Calendar.getInstance().get(Calendar.YEAR)) Color.LightGray else Color.Unspecified
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -117,11 +123,6 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                                     showDialog = true
                                 })
                                 .background(dayColor)
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.LightGray,
-                                    shape = RoundedCornerShape(5.dp)
-                                )
                         ) {
                             Text(
                                 text = dayOfMonth.toString(),
@@ -140,18 +141,20 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
-                title = { Text("Agregar evento para el $selectedDay de ${getMonthName(currentMonth)} \n") },
+                title = {
+                    Text("Agregar evento para el $selectedDay de ${getMonthName(currentMonth)} \n")
+                },
                 text = {
                     Column {
                         TextField(
                             value = eventTitle,
                             onValueChange = { eventTitle = it },
-                            label = { Text("Título del evento") }
+                            label = { Text("Título del evento")},
                         )
                         TextField(
                             value = eventBody,
                             onValueChange = { eventBody = it },
-                            label = { Text("Descripción del evento") }
+                            label = { Text("Descripción del evento") },
                         )
                     }
                 },
@@ -176,7 +179,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             showDialog = false
                         }
                     ) {
-                        Text("Agregar evento")
+                        Text("Agregar evento",style = MaterialTheme.typography.h5)
                     }
                 },
                 dismissButton = {
@@ -186,7 +189,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             eventBody = ""
                             showDialog = false }
                     ) {
-                        Text("Cancelar")
+                        Text("Cancelar", style = MaterialTheme.typography.h6)
                     }
                 }
             )
@@ -195,12 +198,12 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp),
+                    .fillMaxWidth(),
                 onClick = {
-                    showEvents = true },
+                    showEvents = true
+                },
             ) {
-                Text("Mostrar los eventos del Mes")
+                Text("Mostrar los eventos del Mes", style = MaterialTheme.typography.h6)
             }
         }
     }
@@ -215,7 +218,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
             {
                 Text(
                     "Eventos del mes de ${getMonthName(currentMonth)} $currentYear",
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -235,12 +238,12 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                         }
                     }
                 } else {
-                    Text("No hay eventos este mes")
+                    Text("No hay eventos este mes", style = MaterialTheme.typography.h6)
                 }
                 Button(
                     onClick = { showEvents = false },
                 ) {
-                    Text("Cerrar")
+                    Text("Cerrar", style = MaterialTheme.typography.h6)
                 }
             }
         }

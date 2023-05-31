@@ -18,8 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.tec.appnotas.R
 
 @Composable
@@ -50,7 +52,7 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
                     Column {
                         Text(
                             text = "Simple Notes (-•◡•)📝",
-                            style = MaterialTheme.typography.h5,
+                            style = MaterialTheme.typography.h1,
                             modifier = Modifier.padding(5.dp),
                             textAlign = TextAlign.Center
                         )
@@ -73,13 +75,10 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
                 ) {
                     Text(
                         text = """
-                            ✏️💭 ¡Simple Notes! - La forma más sencilla de capturar tus ideas y pensamientos.
+                            Simple Notes - La forma más sencilla de capturar tus ideas y pensamientos.
 
                             📝✨ Simplicidad en tus manos:
-                            Con una interfaz intuitiva y fácil de usar, podrás crear y organizar tus notas en segundos.
-
-                            📍🔔 Recordatorios inteligentes:
-                            Nunca olvides una tarea o evento importante. Nuestra función de recordatorios te mantendrá en el buen camino y te avisará en el momento adecuado. ¡No más estrés por olvidos!
+                            Con una interfaz intuitiva y fácil de usar, podrás crear y organizar tus notas en segundos.                      
 
                             🌄📷 Captura y guarda tus momentos: 
                             No importa dónde te encuentres, con Simple Notes (-•◡•) puedes tomar fotos al instante y adjuntarlas a tus notas. Inmortaliza esos hermosos paisajes, momentos especiales o cualquier cosa que desees recordar.
@@ -92,7 +91,7 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
                             
                             Descarga Simple Notes en la PlayStore! Y lleva tus notas al siguiente nivel. 🚀💡📱💫
                         """.trimIndent(),
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.h4,
                     )
                 }
             }
@@ -100,6 +99,8 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
     }
 }
 
+//📍🔔 Recordatorios inteligentes:
+//Nunca olvides una tarea o evento importante. Nuestra función de recordatorios te mantendrá en el buen camino y te avisará en el momento adecuado. ¡No más estrés por olvidos!
 
 
 

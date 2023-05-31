@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,14 +39,13 @@ fun DrawerHead(){
             contentScale = ContentScale.FillBounds
         )
         Text(
-            text = "Bienvenido 🌟!",
+            text = "Bienvenido! 🌟",
             color = Color.White,
             textAlign = TextAlign.Right,
-            style = TextStyle(fontSize = 30.sp),
+            style = MaterialTheme.typography.h1,
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(16.dp)
-
         )
     }
 }
@@ -72,18 +72,36 @@ fun DrawerBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.navigate(item.route){
+                        navController.navigate(item.route) {
                             popUpTo(navController.graph.findStartDestination().id)
                             launchSingleTop = true
                         }
                         onClick(item.title)
                     }
                     .padding(16.dp)
-            ){
-                Icon(imageVector = item.icon!!, contentDescription = item.title)
-                Text(text = item.title, modifier = Modifier.weight(1f))
+            ) {
+                ImageFromResource(
+                    resourceId = item.icon,
+                    contentDescription = item.title,
+                )
+                Text(
+                    text = item.title,
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier
+                        .padding(7.dp),
+                )
             }
-
         }
     }
+}
+
+@Composable
+fun ImageFromResource(resourceId: Int, contentDescription: String) {
+    val painter: Painter = painterResource(id = resourceId)
+    Image(
+        painter = painter,
+        contentDescription = contentDescription, modifier = Modifier
+            .size(40.dp, 40.dp)
+            .padding(5.dp)
+    )
 }

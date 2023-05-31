@@ -27,22 +27,28 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import com.tec.appnotas.domain.models.Nota
+import com.tec.appnotas.ui.components.SinArchivedNotes
+import com.tec.appnotas.ui.components.SinNotes
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.main.Screens
+import com.tec.appnotas.ui.theme.AzulClaro
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
@@ -67,7 +73,6 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
     val saveBitmap = remember { mutableStateOf<Bitmap?>(null) }
     val context = LocalContext.current
     val density = LocalDensity.current
-
     var LaunchScan by remember { mutableStateOf(false)}
 
     //PERMISOS PARA LA CAMARA, SI SE DAN PERMISOS ENTONCES SE NAVEGA A LA PANTALLA DE ESCANEO
@@ -89,57 +94,65 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
         }
     }
 
+    //Caja de notas
     Box(modifier = Modifier.fillMaxSize(1f)) {
-
-        //LAZY COLUMN CON LAS NOTAS NO ARCHIVADAS
-        LazyColumn() {
-            item() {
-                lista.forEach { item ->
-                    Box(modifier = Modifier.background(
+        if (lista.isEmpty()){
+            SinNotes()
+        }
+        else{
+            //LAZY COLUMN CON LAS NOTAS NO ARCHIVADAS
+            LazyColumn() {
+                item() {
+                    lista.forEach { item ->
+                        Box(modifier = Modifier.background(
                             if(activeItem.value != null && item.notaId == activeItem.value){
-                                MaterialTheme.colors.secondaryVariant
+                                MaterialTheme.colors.primaryVariant
                             }
                             else{
                                 MaterialTheme.colors.surface
                             })) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .combinedClickable(
-                                    onClick = { navController.navigate(route = "NotaScreen/${item.notaId}") },
-                                    onLongClick = {
-                                        if(activeItem.value != null && activeItem.value == item.notaId){
-                                            activeItem.value = null
-                                            showButtons = false
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .combinedClickable(
+                                        onClick = { navController.navigate(route = "NotaScreen/${item.notaId}") },
+                                        onLongClick = {
+                                            if(activeItem.value != null && activeItem.value == item.notaId){
+                                                activeItem.value = null
+                                                showButtons = false
+                                            }
+                                            else {
+                                                activeItem.value = item.notaId;
+                                                showButtons = true
+                                            }
                                         }
-                                        else {
-                                            activeItem.value = item.notaId;
-                                            showButtons = true
-                                        }
-                                    }
-                                )
-                        ) {
-                            Column() {
-                                Row {
-                                    Box(
-                                        modifier = Modifier
-                                            .background(color = androidx.compose.ui.graphics.Color.Green)
-                                            .height(10.dp)
-                                            .width(10.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(20.dp))
-                                    Text(text = item.title, fontSize = 20.sp)
+                            ) {
+                                //Caja de colores de nota
+                                Column() {
+                                    Row {
+                                        Box(
+                                            modifier = Modifier
+                                                .background(color = androidx.compose.ui.graphics.Color.Green)
+                                                .height(10.dp)
+                                                .width(10.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(20.dp))
+                                        Text(text = item.title, fontSize = 20.sp)
+                                    }
+                                    //poner un if para la vista previa
+                                    Text(text = getResumen(item.content), fontSize = 13.sp)
                                 }
-                                Text(text = getResumen(item.content), fontSize = 13.sp)
                             }
                         }
+                        Divider()
                     }
-                    Divider()
                 }
             }
         }
+
 
         Column(modifier = Modifier
             .align(Alignment.BottomCenter)
@@ -169,7 +182,7 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                     }
                 }
             }
-
+//ANIMACION
             AnimatedVisibility(
                 visible = showButtons && activeItem.value != null,
                 enter = slideInVertically {
@@ -235,15 +248,15 @@ fun BottomRow(modifier: Modifier, onShareClick: () -> Unit, onDeleteClick: () ->
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 20.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colors.surface),
+            .clip(RoundedCornerShape(16.dp)),
+            //.background(MaterialTheme.colors.surface),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Button(
             onClick = onShareClick,
             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
-            modifier = Modifier.weight(1f)
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
+            modifier = Modifier.wrapContentWidth()
         ) {
             Text(text = "Compartir", color = MaterialTheme.colors.onSurface)
         }

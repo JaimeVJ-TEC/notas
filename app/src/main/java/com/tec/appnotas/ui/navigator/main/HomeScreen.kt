@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -27,11 +28,11 @@ fun HomeScreenContainer(navController: NavHostController = rememberNavController
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-                 CustomTopBar(title = currentItem,
-                     onNavClick = {
-                         scope.launch{scaffoldState.drawerState.open()}
-                     }
-                 )
+            CustomTopBar(title = currentItem,
+                onNavClick = {
+                    scope.launch { scaffoldState.drawerState.open() }
+                }
+            )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
