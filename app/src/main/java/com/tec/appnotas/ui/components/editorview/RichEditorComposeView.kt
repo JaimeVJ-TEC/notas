@@ -89,6 +89,7 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
     val theme = MaterialTheme.colors
     var initialized = false
     var uri = Uri.EMPTY
+    var lastcontent = ""
 
     val richEditorComposeView = remember {
         RichEditorComposeView(context).apply {
@@ -97,6 +98,12 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
             editor.setEditorFontSize(14)
 
             editor.setOnTextChangeListener {
+                if(it.length <= 5000){
+                    lastcontent = it
+                }
+                else{
+                    editor.html = lastcontent
+                }
                 onContentUpdate(it)
             }
             if(!initialized) {

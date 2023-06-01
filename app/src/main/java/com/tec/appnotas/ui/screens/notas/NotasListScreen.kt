@@ -67,6 +67,7 @@ fun NotasListScreen(navController: NavHostController, globalProvider: GlobalProv
 @Composable
 fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvider: GlobalProvider) {
     val showDescription = globalProvider.dataStore.getDescriptionValue.collectAsState(initial = true).value
+    val vmState = globalProvider.userVM.userState.collectAsState().value
 
     val coroutineScope = rememberCoroutineScope()
     val activeItem = remember { mutableStateOf<Int?>(null) }
@@ -96,6 +97,11 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
         }
     }
 
+    if(vmState == UserVMState.CONNECTION_ERROR){
+        Toast.makeText(context, "Error de conexion", Toast.LENGTH_SHORT).show()
+        globalProvider.userVM.notifiedError()
+    }
+
     //Caja de notas
     Box(modifier = Modifier.fillMaxSize(1f)) {
         if (lista.isEmpty()){
@@ -121,11 +127,10 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                                     .combinedClickable(
                                         onClick = { navController.navigate(route = "NotaScreen/${item.notaId}") },
                                         onLongClick = {
-                                            if(activeItem.value != null && activeItem.value == item.notaId){
+                                            if (activeItem.value != null && activeItem.value == item.notaId) {
                                                 activeItem.value = null
                                                 showButtons = false
-                                            }
-                                            else {
+                                            } else {
                                                 activeItem.value = item.notaId;
                                                 showButtons = true
                                             }
@@ -208,7 +213,7 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                         if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                             coroutineScope.launch(Dispatchers.IO) {
                                 saveBitmap.value = globalProvider.userVM.shareNota(activeItem.value!!)
-                                showDialog.value = true
+                                showDialog.value = saveBitmap.value != null
                             }
                         } else {
                             permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +54,7 @@ fun ArchivoScreen(navController: NavHostController, globalProvider: GlobalProvid
 @Composable
 fun ListaNotasArchived(lista: List<Nota>, navController: NavHostController, globalProvider: GlobalProvider) {
     val activeItem = remember { mutableStateOf<Int?>(null) }
+    val density = LocalDensity.current
     var showButtons by remember { mutableStateOf(false ) }
     if (lista.isEmpty()){
         SinArchivedNotes()
@@ -67,10 +70,13 @@ fun ListaNotasArchived(lista: List<Nota>, navController: NavHostController, glob
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .combinedClickable(onClick = {}, onLongClick = {
-                                    activeItem.value = item.notaId; Log.d(
-                                    "ACTIVEITEM", item.notaId.toString()
-                                )
-                                    showButtons = true
+                                    if (activeItem.value != null && activeItem.value == item.notaId) {
+                                        activeItem.value = null
+                                        showButtons = false
+                                    } else {
+                                        activeItem.value = item.notaId;
+                                        showButtons = true
+                                    }
                                 })
                         ) {
                             Column() {
@@ -95,20 +101,36 @@ fun ListaNotasArchived(lista: List<Nota>, navController: NavHostController, glob
             Column(modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()) {
-                if(showButtons && activeItem.value != null) {
+                AnimatedVisibility(
+                    visible = showButtons && activeItem.value != null,
+                    enter = slideInVertically {
+                        with(density) { 40.dp.roundToPx() }
+                    } + expandVertically(
+                        expandFrom = Alignment.Bottom
+                    ) + fadeIn(
+                        initialAlpha = 0.3f
+                    ),
+                    exit = slideOutVertically() + shrinkVertically() + fadeOut()
+                ) {
                     BottomRowArchived(
                         modifier = Modifier.fillMaxWidth(),
                         onRestoreClick =
                         {
-                            globalProvider.userVM.archiveNota(activeItem.value!!,false)
+                            globalProvider.userVM.archiveNota(activeItem.value!!, false)
+                            showButtons = false
+                            activeItem.value = null
                         },
                         onDeleteClick =
                         {
                             globalProvider.userVM.deleteNota(activeItem.value!!)
+                            showButtons = false
+                            activeItem.value = null
                         }
                     )
+
                 }
             }
+
         }
     }
 }

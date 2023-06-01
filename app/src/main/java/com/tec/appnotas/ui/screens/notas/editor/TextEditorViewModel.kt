@@ -49,7 +49,6 @@ class TextEditorViewModel @Inject constructor(
 
     fun onContentChanged(content: String){
         _nota.value = _nota.value.copy(content = content)
-        Log.d("CONTENT",_nota.value.content)
         updateNota(_nota.value)
     }
 

@@ -32,6 +32,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.navigator.main.ScaffoldScreen
 import com.tec.appnotas.ui.navigator.main.Screens
+import com.tec.appnotas.ui.screens.notas.UserVMState
 import com.tec.appnotas.ui.screens.notas.UserViewmodel
 import kotlinx.coroutines.launch
 
@@ -39,17 +40,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostController){
     val context = LocalContext.current
+    val state = globalProvider.userVM.userState.collectAsState().value
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
     }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var detected by remember { mutableStateOf(false)}
+
     if(detected){
-        Log.d("ASD","ASDSDASDADA")
-        Log.d("ASD","ASDSDASDADA")
-        Log.d("ASD","ASDSDASDADA")
-        Log.d("ASD","ASDSDASDADA")
+        Log.d("STATE",state.toString())
+        if(state == UserVMState.CONNECTION_ERROR){
+            Toast.makeText(context, "Error de conexion", Toast.LENGTH_SHORT).show()
+            globalProvider.userVM.notifiedError()
+        }
+        navHostController.popBackStack(ScaffoldScreen.Home.route,false,false)
     }
 
     Column(
@@ -70,15 +75,8 @@ fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostControl
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     BarcodeAnalyzer { result ->
-                        try {
-                            globalProvider.userVM.getNotaFromCode(result.rawValue.toString())
-                        } catch (e: Exception) {
-                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                        }
-                        finally {
-                            detected = true
-                            navHostController.popBackStack(ScaffoldScreen.Home.route,false,false)
-                        }
+                        globalProvider.userVM.getNotaFromCode(result.rawValue.toString())
+                        detected = true
                     }
                 )
                 try {

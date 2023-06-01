@@ -22,8 +22,7 @@ interface NotaRepository {
 
 class NotaRepositoryImp @Inject constructor(
     private val dataSource: RestDataSource,
-    private val notaDao: NotaDao,
-    private val imagenDao: ImagenDao
+    private val notaDao: NotaDao
 ) : NotaRepository{
 
     override suspend fun getNota(id: String): Nota {
