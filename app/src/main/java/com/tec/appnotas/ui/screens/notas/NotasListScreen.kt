@@ -38,6 +38,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -147,7 +148,7 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                                                 .width(10.dp)
                                         )
                                         Spacer(modifier = Modifier.width(20.dp))
-                                        Text(text = item.title, fontSize = 20.sp)
+                                        Text(text = item.title, fontSize = 20.sp,modifier = Modifier.testTag("list_title"))
                                     }
                                     //poner un if para la vista previa
                                     if(showDescription) {
@@ -303,6 +304,7 @@ fun AddButton(modifier: Modifier,onClick: () -> Unit) {
             .shadow(4.dp, CircleShape)
             .clip(CircleShape)
             .background(MaterialTheme.colors.surface)
+            .testTag("Add")
     ) {
         Icon(
             imageVector = Icons.Default.Add,

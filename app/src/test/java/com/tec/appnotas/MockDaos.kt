@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
-private val nota1 = Nota(1,"MockNota1","MockNota1Content",false)
+val nota1 = Nota(1,"MockNota1","MockNota1Content",false)
 private val nota2 = Nota(2,"MockNota2","MockNota2Content",true)
 
 class MockNotaDao: NotaDao {
@@ -23,7 +23,18 @@ class MockNotaDao: NotaDao {
     }
 
     override suspend fun updateNota(nota: Nota) {
-        TODO("Not yet implemented")
+        var updatedNota = nota
+        var listNota = Nota(-1)
+        for(note in notas.value){
+            if(note.notaId == updatedNota.notaId) {
+                listNota == note
+            }
+        }
+        if(listNota.notaId != -1) {
+            val list = notas.value.toMutableList()
+            list[list.indexOf(listNota)] = updatedNota
+            notas.value = list
+        }
     }
 
     override suspend fun deleteNota(nota: Nota) {
@@ -35,7 +46,12 @@ class MockNotaDao: NotaDao {
     }
 
     override fun getNotaById(id: Int): Nota {
-        TODO("Not yet implemented")
+        for(note in notas.value){
+            if(note.notaId == id) {
+                return note
+            }
+        }
+        return Nota(-1)
     }
 
     override fun getArchivedNotas(archived: Boolean): Flow<List<Nota>> {

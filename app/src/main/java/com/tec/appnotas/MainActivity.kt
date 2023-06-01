@@ -47,14 +47,19 @@ class MainActivity : ComponentActivity() {
 
             AppnotasTheme(darkTheme = darkmode) {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    RootGraph(globalProvider = gp)
-                }
+                mainScreen(gp = gp)
             }
         }
+    }
+}
+
+@Composable
+fun mainScreen(gp: GlobalProvider){
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        RootGraph(globalProvider = gp)
     }
 }
 //

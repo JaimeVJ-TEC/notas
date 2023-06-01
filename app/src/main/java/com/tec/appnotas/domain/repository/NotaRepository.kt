@@ -27,15 +27,12 @@ class NotaRepositoryImp @Inject constructor(
 
     override suspend fun getNota(id: String): Nota {
         val response = dataSource.getNotaById("eq.$id")
-        Log.d("ID",id)
-        Log.d("RESPONSE",response[0].title)
         return Nota(content = response[0].content,title = response[0].title)
     }
 
     override suspend fun postNota(nota: Nota): NotasResponseItem {
         val response = dataSource.postNota(PostItem(nota.content,nota.title))
 
-        Log.d("INSERTED",response[0].title)
         return response[0]
     }
 
