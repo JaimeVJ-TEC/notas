@@ -1,10 +1,12 @@
 package com.tec.appnotas
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.tec.appnotas.domain.dao.NotaDao
 import com.tec.appnotas.domain.datasource.RestDataSource
 import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.domain.repository.NotaRepositoryImp
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -12,9 +14,11 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import okio.buffer
 import okio.source
+import org.junit.After
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Rule
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -40,6 +44,22 @@ class NotasRepositoryUnitTest {
         .create(RestDataSource::class.java)
 
     private val notasRespository = NotaRepositoryImp(restDataSource, MockNotaDao())
+
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
+
+    @After
+    fun tearDown(){
+        mockWebServer.shutdown()
+    }
+
+    @Test
+    fun `Se obtienen las notas no archivadas de la base de datos correctamente`(){
+        val users = notasRespository.getLocalNotas(false)
+        runBlocking {
+            assertEquals(1,users.first().size)
+        }
+    }
 
 }
 
