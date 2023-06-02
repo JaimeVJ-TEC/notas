@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -155,7 +156,7 @@ fun BottomRowArchived(modifier: Modifier, onRestoreClick: () -> Unit, onDeleteCl
             shape = RoundedCornerShape(4.dp)
         ) {
             Text(
-                text = "Desarchivar",
+                text = stringResource(R.string.archive_unarchive),
                 style = MaterialTheme.typography.h6
             )
         }
@@ -171,7 +172,7 @@ fun BottomRowArchived(modifier: Modifier, onRestoreClick: () -> Unit, onDeleteCl
             shape = RoundedCornerShape(4.dp)
         ) {
             Text(
-                text = "Borrar nota",
+                text = stringResource(R.string.archive_delete),
                 style = MaterialTheme.typography.h6
             )
         }

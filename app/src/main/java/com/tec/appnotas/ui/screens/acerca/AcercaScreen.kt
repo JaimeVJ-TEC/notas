@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,9 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
                     Image(
                         painter = painterResource(R.drawable.logo),
                         contentDescription = "Logo",
-                        modifier = Modifier.size(64.dp).padding(5.dp)
+                        modifier = Modifier
+                            .size(64.dp)
+                            .padding(5.dp)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
@@ -74,23 +77,7 @@ fun AcercaScreen(navController: NavHostController, globalProvider: GlobalProvide
                         .padding(5.dp)
                 ) {
                     Text(
-                        text = """
-                            Simple Notes - La forma más sencilla de capturar tus ideas y pensamientos.
-
-                            📝✨ Simplicidad en tus manos:
-                            Con una interfaz intuitiva y fácil de usar, podrás crear y organizar tus notas en segundos.                      
-
-                            🌄📷 Captura y guarda tus momentos: 
-                            No importa dónde te encuentres, con Simple Notes (-•◡•) puedes tomar fotos al instante y adjuntarlas a tus notas. Inmortaliza esos hermosos paisajes, momentos especiales o cualquier cosa que desees recordar.
-
-                            🌙🌓 Interfaz intuitiva y modo oscuro: 
-                            Navega por la aplicación sin esfuerzo y disfruta de una experiencia visualmente atractiva con nuestro elegante modo oscuro. Tanto si eres un búho nocturno como si te encanta el brillo del día, tenemos lo que necesitas.
-
-                            🌐👥 Comparte tus notas!: 
-                            Comparte tus notas con otros dispositivos, con Simple Notes tus ideas siempre estarán al alcance de tu mano!
-                            
-                            Descarga Simple Notes en la PlayStore! Y lleva tus notas al siguiente nivel. 🚀💡📱💫
-                        """.trimIndent(),
+                        text = stringResource(id = R.string.about).trimIndent(),
                         style = MaterialTheme.typography.h4,
                     )
                 }

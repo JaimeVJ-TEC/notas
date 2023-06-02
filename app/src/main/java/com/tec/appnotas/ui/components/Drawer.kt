@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,7 @@ fun DrawerHead(){
             contentScale = ContentScale.FillBounds
         )
         Text(
-            text = "Bienvenido! 🌟",
+            text = stringResource(R.string.welcome) +" 🌟",
             color = Color.White,
             textAlign = TextAlign.Right,
             style = MaterialTheme.typography.h1,
@@ -56,7 +57,7 @@ fun DrawerHead(){
 fun DrawerBody(
     modifier: Modifier,
     navController: NavHostController,
-    onClick: (String) -> Unit
+    onClick: (Int) -> Unit
 ){
     val screens = listOf(
         ScaffoldScreen.Home,
@@ -82,10 +83,10 @@ fun DrawerBody(
             ) {
                 ImageFromResource(
                     resourceId = item.icon,
-                    contentDescription = item.title,
+                    contentDescription = stringResource(item.title),
                 )
                 Text(
-                    text = item.title,
+                    text = stringResource(item.title),
                     style = MaterialTheme.typography.h4,
                     modifier = Modifier
                         .padding(7.dp),

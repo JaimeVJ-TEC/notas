@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tec.appnotas.R
 
@@ -31,7 +32,7 @@ fun SinArchivedNotes() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Parece que aún no hay notas archivadas 😕❓", style = MaterialTheme.typography.h6
+            text = stringResource(R.string.archive_empty_text) +" 😕❓", style = MaterialTheme.typography.h6
         )
     }
 }
@@ -54,7 +55,7 @@ fun SinNotes() {
 
         )
         Spacer(modifier = Modifier.height(2.dp))
-        Text(text = "Aún no existen notas 📝 ¡Crea una nueva haciendo tocando en el botón! ⭐",style = MaterialTheme.typography.h5)
+        Text(text = stringResource(R.string.list_empty),style = MaterialTheme.typography.h5)
 
     }
 }

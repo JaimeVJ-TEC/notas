@@ -45,6 +45,7 @@ class ExampleInstrumentedTest {
     }
 
     //No clue how to make UI tests with all of this stuff
+    //Tests de UI no funcionan por el momento
     @Test
     fun se_agrega_nueva_nota_correctamente(){
         composeTestRule.setContent {

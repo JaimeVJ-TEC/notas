@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import com.tec.appnotas.BuildConfig
+import com.tec.appnotas.R
 import com.tec.appnotas.ui.components.StyleButtonRow
 import com.tec.appnotas.ui.components.Styles
 import com.tec.appnotas.ui.screens.notas.editor.titleField
@@ -91,6 +93,9 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
     var uri = Uri.EMPTY
     var lastcontent = ""
 
+    val permissionSuccess = stringResource(R.string.permission_success)
+    val permissionFailure = stringResource(R.string.permission_failure)
+
     val richEditorComposeView = remember {
         RichEditorComposeView(context).apply {
             // Customize the RichEditor settings here, e.g.:
@@ -138,10 +143,10 @@ fun RichEditorCompose(title: String,onContentUpdate: (String) -> Unit,onTitleUpd
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, permissionSuccess, Toast.LENGTH_SHORT).show()
             cameraLauncher.launch(uri)
         } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, permissionFailure, Toast.LENGTH_SHORT).show()
         }
     }
 

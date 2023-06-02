@@ -1,5 +1,11 @@
 package com.tec.appnotas
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +30,7 @@ import com.tec.appnotas.ui.screens.calendario.CalendarioViewModel
 import com.tec.appnotas.ui.screens.notas.UserViewmodel
 import com.tec.appnotas.ui.theme.AppnotasTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,6 +52,10 @@ class MainActivity : ComponentActivity() {
             )
 
             val darkmode = gp.dataStore.getDarkModeValue.collectAsState(initial = false).value
+//            val locale = gp.dataStore.getLanguageValue.collectAsState(initial = "es").value
+//            Locale.setDefault(Locale(locale))
+//            Locale.setDefault(Locale("en"))
+//            var changed = false
 
             AppnotasTheme(darkTheme = darkmode) {
                 // A surface container using the 'background' color from the theme
@@ -62,12 +74,3 @@ fun mainScreen(gp: GlobalProvider){
         RootGraph(globalProvider = gp)
     }
 }
-//
-//@Composable
-//fun test(viewModel: NotasViewModel = hiltViewModel()){
-//    Button(onClick = {
-//        viewModel.getNota("9de78c0c-78cb-4d0f-b3ef-7e5d23ee0c5c")
-//    }){
-//
-//    }
-//}

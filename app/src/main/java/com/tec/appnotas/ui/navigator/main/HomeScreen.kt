@@ -9,6 +9,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tec.appnotas.ui.components.CustomTopBar
@@ -24,6 +26,7 @@ fun HomeScreenContainer(navController: NavHostController = rememberNavController
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var currentItem by remember { mutableStateOf("Simple Notes (-•◡•)")}
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -38,7 +41,7 @@ fun HomeScreenContainer(navController: NavHostController = rememberNavController
         drawerContent = {
             DrawerHead()
             DrawerBody(modifier = Modifier, navController) {
-                currentItem = it
+                currentItem = context.getString(it)
                 scope.launch{scaffoldState.drawerState.close()}
             }
         }

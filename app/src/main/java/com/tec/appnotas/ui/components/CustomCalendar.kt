@@ -32,25 +32,27 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.tec.appnotas.R
 import com.tec.appnotas.domain.dao.EventoDao
 import com.tec.appnotas.ui.screens.calendario.CalendarioViewModel
 import com.tec.appnotas.domain.models.Event
+import com.tec.appnotas.ui.global.GlobalProvider
 import com.tec.appnotas.ui.theme.AzulClaro
 import java.text.DateFormatSymbols
+import java.time.Month
+import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun MiCalendario(viewModel: CalendarioViewModel) {
-
-    //EN CUALQUIER PARTE DONDE AGREGES O MODIFIQUES EVENTOS LLAMA EMTODOS DE CALENDARIO VIEWMODEL
-
-    //CAMBIA A COLLECT STATE DEL VIEWMODEL
-    val events = viewModel.events.collectAsState(initial = listOf()).value // Define una lista mutable para los eventos
+fun MiCalendario(viewModel: CalendarioViewModel,globalProvider: GlobalProvider) {
+    val events = viewModel.events.collectAsState(initial = listOf()).value
+    val locale = globalProvider.dataStore.getLanguageValue.collectAsState("es").value
 
     var currentMonth by remember { mutableStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
     var currentYear by remember { mutableStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
@@ -79,16 +81,16 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
 
         Row {
             IconButton(onClick = { currentMonth-- }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Mes anterior")
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.calendar_desc_last_month))
             }
             Text(
-                text = "${getMonthName(currentMonth)}, $currentYear",
+                text = "${getMonthName(currentMonth,locale)}, $currentYear",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
             )
             IconButton(onClick = { currentMonth++ }) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "Mes siguiente")
+                Icon(Icons.Default.ArrowForward, contentDescription = stringResource(R.string.calendar_desc_next_month))
             }
         }
 
@@ -142,19 +144,23 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
                 title = {
-                    Text("Agregar evento para el $selectedDay de ${getMonthName(currentMonth)} \n")
+                    Text(
+                        stringResource(R.string.calenar_add_event) + selectedDay +" "+ stringResource(R.string.calendar_of) +" "+ getMonthName(
+                            currentMonth,locale
+                        ) + " \n"
+                    )
                 },
                 text = {
                     Column {
                         TextField(
                             value = eventTitle,
                             onValueChange = { eventTitle = it },
-                            label = { Text("Título del evento")},
+                            label = { Text(stringResource(R.string.calendar_event_title))},
                         )
                         TextField(
                             value = eventBody,
                             onValueChange = { eventBody = it },
-                            label = { Text("Descripción del evento") },
+                            label = { Text(stringResource(R.string.calendar_event_description)) },
                         )
                     }
                 },
@@ -166,9 +172,10 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                                 showDialog = false
                             }else{
                                 viewModel.insertEvento(
+                                    //Remover Interpolacion
                                     Event(
-                                        title = "Titulo: $eventTitle",
-                                        eventBody = "Descripcion: $eventBody",
+                                        title = eventTitle,
+                                        eventBody = eventBody,
                                         selectedDay = selectedDay,
                                         currentMonth = currentMonth
                                     ))
@@ -179,7 +186,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             showDialog = false
                         }
                     ) {
-                        Text("Agregar evento",style = MaterialTheme.typography.h5)
+                        Text(stringResource(R.string.calendar_save_event),style = MaterialTheme.typography.h5)
                     }
                 },
                 dismissButton = {
@@ -189,7 +196,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                             eventBody = ""
                             showDialog = false }
                     ) {
-                        Text("Cancelar", style = MaterialTheme.typography.h6)
+                        Text(stringResource(R.string.calendar_cancel), style = MaterialTheme.typography.h6)
                     }
                 }
             )
@@ -203,7 +210,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                     showEvents = true
                 },
             ) {
-                Text("Mostrar los eventos del Mes", style = MaterialTheme.typography.h6)
+                Text(stringResource(R.string.calendar_show_events), style = MaterialTheme.typography.h6)
             }
         }
     }
@@ -216,7 +223,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
             Column(modifier = Modifier.padding(16.dp))
             {
                 Text(
-                    "Eventos del mes de ${getMonthName(currentMonth)} $currentYear",
+                    stringResource(R.string.calendar_show_event_date) +" "+ getMonthName(currentMonth,locale) + " " + currentYear,
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -225,7 +232,7 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                     for (event in events) {
                         if (event.currentMonth == currentMonth) {
                             Text(
-                                "Día ${event.selectedDay} \n${event.title}",
+                                stringResource(R.string.calendar_show_event_day) + event.selectedDay + " \n" + event.title,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
@@ -237,12 +244,12 @@ fun MiCalendario(viewModel: CalendarioViewModel) {
                         }
                     }
                 } else {
-                    Text("No hay eventos este mes", style = MaterialTheme.typography.h6)
+                    Text(stringResource(R.string.calendar_no_events), style = MaterialTheme.typography.h6)
                 }
                 Button(
                     onClick = { showEvents = false },
                 ) {
-                    Text("Cerrar", style = MaterialTheme.typography.h6)
+                    Text(stringResource(R.string.calendar_close), style = MaterialTheme.typography.h6)
                 }
             }
         }
@@ -266,8 +273,9 @@ fun getStartDayOfMonth(month: Int, year: Int): Int {
     return calendar.get(Calendar.DAY_OF_WEEK)
 }
 
-fun getMonthName(month: Int): String {
-    return DateFormatSymbols().months[month]
+fun getMonthName(month: Int, locale: String): String {
+    val dateFormatSymbols = DateFormatSymbols(Locale(locale))
+    return dateFormatSymbols.months[month - 1]
 }
 
 fun getDayOfWeekName(dayOfWeek: Int): String {

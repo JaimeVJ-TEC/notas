@@ -39,11 +39,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
+import com.tec.appnotas.R
 import com.tec.appnotas.domain.models.Nota
 import com.tec.appnotas.ui.components.SinArchivedNotes
 import com.tec.appnotas.ui.components.SinNotes
@@ -78,13 +80,17 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
     val context = LocalContext.current
     val density = LocalDensity.current
     var LaunchScan by remember { mutableStateOf(false)}
+
+    val permissionSuccess = stringResource(id = R.string.permission_success)
+    val permissionFailure = stringResource(R.string.permission_failure)
+    val connectionError = stringResource(R.string.connection_error)
     
     //PERMISOS PARA LA CAMARA, SI SE DAN PERMISOS ENTONCES SE NAVEGA A LA PANTALLA DE ESCANEO
     val permissionLauncher = rememberLauncherForActivityResult(
     ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, permissionSuccess, Toast.LENGTH_SHORT).show()
             if(LaunchScan) {
                 navController.navigate(Screens.ScanScreen.route)
             }else{
@@ -94,12 +100,12 @@ fun ListaNotas(lista: List<Nota>, navController: NavHostController,globalProvide
                 }
             }
         } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, permissionFailure, Toast.LENGTH_SHORT).show()
         }
     }
 
     if(vmState == UserVMState.CONNECTION_ERROR){
-        Toast.makeText(context, "Error de conexion", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, connectionError, Toast.LENGTH_SHORT).show()
         globalProvider.userVM.notifiedError()
     }
 
@@ -266,9 +272,9 @@ fun BottomRow(modifier: Modifier, onShareClick: () -> Unit, onDeleteClick: () ->
             onClick = onShareClick,
             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
-            modifier = Modifier.wrapContentWidth()
+            modifier = Modifier.weight(1f)
         ) {
-            Text(text = "Compartir", color = MaterialTheme.colors.onSurface)
+            Text(text = stringResource(R.string.row_button_share), color = MaterialTheme.colors.onSurface)
         }
 
         Button(
@@ -277,7 +283,7 @@ fun BottomRow(modifier: Modifier, onShareClick: () -> Unit, onDeleteClick: () ->
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = "Eliminar", color = MaterialTheme.colors.onError)
+            Text(text = stringResource(R.string.row_button_delete), color = MaterialTheme.colors.onError)
         }
 
         Button(
@@ -286,7 +292,7 @@ fun BottomRow(modifier: Modifier, onShareClick: () -> Unit, onDeleteClick: () ->
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = "Archivar", color = MaterialTheme.colors.onSurface)
+            Text(text = stringResource(R.string.row_button_archive), color = MaterialTheme.colors.onSurface)
         }
     }
 }
@@ -342,7 +348,7 @@ fun PopUpQRCode(show: Boolean, context: Context, onDismiss: () -> Unit, onClick:
     if (show) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text(text = "Codigo QR") },
+            title = { Text(text = stringResource(R.string.alert_qr_code)) },
             text = {
                 Column {
                     if(QRCode != null) {
@@ -368,7 +374,7 @@ fun PopUpQRCode(show: Boolean, context: Context, onDismiss: () -> Unit, onClick:
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    Text(text = "Guardar")
+                    Text(text = stringResource(R.string.alert_save))
                 }
             }
         )

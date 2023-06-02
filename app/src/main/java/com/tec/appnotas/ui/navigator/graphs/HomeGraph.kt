@@ -1,5 +1,6 @@
 package com.tec.appnotas.ui.navigator.graphs
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -31,6 +32,9 @@ fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
             SplashScreen(navController)
         }
         composable(route = ScaffoldScreen.Home.route){
+            BackHandler(true) {
+                globalProvider.nav.popBackStack()
+            }
             NotasListScreen(navController, globalProvider)
         }
 
@@ -43,22 +47,32 @@ fun HomeGraph(navController: NavHostController, globalProvider: GlobalProvider){
         }
 
         composable(route = Screens.ScanScreen.route){
+            BackHandler(true) {
+            }
             ScanScreen(globalProvider = globalProvider, navHostController = navController)
         }
 
         composable(route = ScaffoldScreen.Archivo.route){
+            BackHandler(true) {
+            }
             ArchivoScreen(navController, globalProvider)
         }
 
         composable(route = ScaffoldScreen.Calendario.route){
+            BackHandler(true) {
+            }
             CalendarioScreen(navController, globalProvider)
         }
 
         composable(route = ScaffoldScreen.Opciones.route){
+            BackHandler(true) {
+            }
             OpcionesScreen(navController, globalProvider)
         }
 
         composable(route = ScaffoldScreen.Acerca.route){
+            BackHandler(true) {
+            }
             AcercaScreen(navController, globalProvider)
         }
     }

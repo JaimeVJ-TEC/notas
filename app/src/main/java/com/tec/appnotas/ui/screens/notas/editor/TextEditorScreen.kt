@@ -71,7 +71,7 @@ fun titleField(title: String, onTitleChange: (String) -> Unit) {
                 .fillMaxWidth()
                 .height(80.dp)
                 .focusRequester(focusRequester),
-            maxLines = 1,
+            singleLine = true
         )
         DisposableEffect(Unit) {
             focusRequester.requestFocus()

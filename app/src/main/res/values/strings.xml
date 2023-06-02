@@ -1,3 +1,57 @@
 <resources>
     <string name="app_name">Simple Notes</string>
+    <string name="row_button_share">Compartir</string>
+    <string name="row_button_delete">Eliminar</string>
+    <string name="row_button_archive">Archivar</string>
+    <string name="alert_qr_code">Codigo QR</string>
+    <string name="alert_save">Guardar</string>
+    <string name="calendar_desc_last_month">Mes anterior</string>
+    <string name="calendar_desc_next_month">Mes siguiente</string>
+    <string name="calendar_event_title">Título del evento</string>
+    <string name="calendar_event_description">Descripción del evento</string>
+    <string name="calendar_save_event">Agregar evento</string>
+    <string name="calendar_cancel">Cancelar</string>
+    <string name="calendar_show_events">Mostrar los eventos del Mes</string>
+    <string name="calendar_show_event_date">\"Eventos del mes de \"</string>
+    <string name="calendar_show_event_day">\"Día \"</string>
+    <string name="calendar_no_events">No hay eventos este mes</string>
+    <string name="calendar_close">Cerrar</string>
+    <string name="calenar_add_event">\"Agregar evento para el \"</string>
+    <string name="calendar_of">\" de \"</string>
+    <string name="about">"
+                            Simple Notes - La forma más sencilla de capturar tus ideas y pensamientos.
+
+                            📝✨ Simplicidad en tus manos:
+                            Con una interfaz intuitiva y fácil de usar, podrás crear y organizar tus notas en segundos.
+
+                            🌄📷 Captura y guarda tus momentos:
+                            No importa dónde te encuentres, con Simple Notes (-•◡•) puedes tomar fotos al instante y adjuntarlas a tus notas. Inmortaliza esos hermosos paisajes, momentos especiales o cualquier cosa que desees recordar.
+
+                            🌙🌓 Interfaz intuitiva y modo oscuro:
+                            Navega por la aplicación sin esfuerzo y disfruta de una experiencia visualmente atractiva con nuestro elegante modo oscuro. Tanto si eres un búho nocturno como si te encanta el brillo del día, tenemos lo que necesitas.
+
+                            🌐👥 Comparte tus notas!:
+                            Comparte tus notas con otros dispositivos, con Simple Notes tus ideas siempre estarán al alcance de tu mano!
+
+                            Descarga Simple Notes en la PlayStore! Y lleva tus notas al siguiente nivel. 🚀💡📱💫
+                        "</string>
+    <string name="permission_success">Permiso concedido</string>
+    <string name="permission_failure">Permiso denegado</string>
+    <string name="connection_error">Error de conexion</string>
+    <string name="archive_empty_text">Parece que aún no hay notas archivadas</string>
+    <string name="list_empty">Aún no existen notas 📝 ¡Crea una nueva haciendo tocando en el botón! ⭐</string>
+    <string name="welcome">Bienvenido!</string>
+    <string name="archive_unarchive">Desarchivar</string>
+    <string name="archive_delete">Borrar nota</string>
+    <string name="options_darkmode">Modo oscuro</string>
+    <string name="options_preview">Vista previa</string>
+    <string name="options_instruct_start">Configura Simple Notes.</string>
+    <string name="options_instruct_darkmode">\"🌓 Modo oscuro: Cambia el tema de la aplicacion para descansar tu vista en ambientes con poca luz. \"</string>
+    <string name="option_row_enabled">Activado</string>
+    <string name="option_row_disable">Desactivado</string>
+    <string name="home_title"> Notas</string>
+    <string name="archivo_title"> Archivo</string>
+    <string name="calendario_title"> Calendario</string>
+    <string name="opciones_title"> Opciones</string>
+    <string name="acerca_title"> Acerca de la App</string>
 </resources>

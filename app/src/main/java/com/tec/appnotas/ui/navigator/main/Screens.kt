@@ -1,5 +1,6 @@
 package com.tec.appnotas.ui.navigator.main
 
+import androidx.annotation.StringRes
 import com.tec.appnotas.R
 
 const val ARGUMENT_NOTAID = "id"
@@ -12,37 +13,37 @@ sealed class Screens(val route : String){
 }
 
 sealed class ScaffoldScreen(val route : String,
-                            val title: String,
+                            @StringRes val title:Int,
                             val icon: Int
 ){
 
     object Home: ScaffoldScreen(
         route = "Notas",
-        title = " Notas",
+        title = R.string.home_title,
         R.drawable.notesicon
     )
 
     object Archivo: ScaffoldScreen(
         route = "Archivo",
-        title = " Archivo",
+        title = R.string.archivo_title,
         R.drawable.clipicon
     )
 
     object Calendario: ScaffoldScreen(
         route = "Calendario",
-        title = " Calendario",
+        title = R.string.calendario_title,
         R.drawable.calendaricon
     )
 
     object Opciones: ScaffoldScreen(
         route = "Opciones",
-        title = " Opciones",
+        title = R.string.opciones_title,
         R.drawable.toolicon
     )
 
     object Acerca: ScaffoldScreen(
         route = "Acerca",
-        title = " Acerca de la App",
+        title = R.string.acerca_title,
         R.drawable.abouticon
     )
 }

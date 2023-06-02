@@ -8,5 +8,5 @@ import com.tec.appnotas.ui.global.GlobalProvider
 
 @Composable
 fun CalendarioScreen(navController: NavHostController, globalProvider: GlobalProvider) {
-    MiCalendario(viewModel = globalProvider.calendarioVM)
+    MiCalendario(viewModel = globalProvider.calendarioVM,globalProvider)
 }
