@@ -33,6 +33,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -145,7 +146,7 @@ fun MiCalendario(viewModel: CalendarioViewModel,globalProvider: GlobalProvider) 
                 onDismissRequest = { showDialog = false },
                 title = {
                     Text(
-                        stringResource(R.string.calenar_add_event) + selectedDay +" "+ stringResource(R.string.calendar_of) +" "+ getMonthName(
+                        stringResource(R.string.calenar_add_event) +" "+ selectedDay +" "+ stringResource(R.string.calendar_of) +" "+ getMonthName(
                             currentMonth,locale
                         ) + " \n"
                     )
@@ -232,12 +233,13 @@ fun MiCalendario(viewModel: CalendarioViewModel,globalProvider: GlobalProvider) 
                     for (event in events) {
                         if (event.currentMonth == currentMonth) {
                             Text(
-                                stringResource(R.string.calendar_show_event_day) + event.selectedDay + " \n" + event.title,
+                                stringResource(R.string.calendar_show_event_day) +" "+ event.selectedDay + " \n" + stringResource(
+                                                                    R.string.calendar_show_title)  +" "+ event.title,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             Text(
-                                event.eventBody,
+                                stringResource(R.string.calendar_show_body) +" "+ event.eventBody,
                                 fontSize = 14.sp,
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
@@ -275,7 +277,11 @@ fun getStartDayOfMonth(month: Int, year: Int): Int {
 
 fun getMonthName(month: Int, locale: String): String {
     val dateFormatSymbols = DateFormatSymbols(Locale(locale))
-    return dateFormatSymbols.months[month - 1]
+    return dateFormatSymbols.months[month - 1].replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            Locale(locale)
+        ) else it.toString()
+    }
 }
 
 fun getDayOfWeekName(dayOfWeek: Int): String {

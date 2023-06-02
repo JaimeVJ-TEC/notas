@@ -14,7 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -60,11 +62,11 @@ fun OpcionesScreen(
             }
         }
 
-//        LanguageDropdown(languages = locales, selectedLanguage = Locale(valorLanguage), onLanguageSelected = {
-//            coroutineScope.launch {
-//                globalProvider.dataStore.saveLanguageValue(it.language)
-//            }
-//        })
+        LanguageDropdown(languages = locales, selectedLanguage = Locale(valorLanguage), onLanguageSelected = {
+            coroutineScope.launch {
+                globalProvider.dataStore.saveLanguageValue(it.language)
+            }
+        })
 
     }
 }
@@ -110,11 +112,22 @@ fun LanguageDropdown(
     var expanded by remember { mutableStateOf(false) }
     val selectedIndex = languages.indexOf(selectedLanguage)
 
-    Box(modifier = Modifier.wrapContentSize()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(75.dp)
+            .padding(10.dp)
+            .border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(15.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { expanded = true },
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
-            text = selectedLanguage.displayName,
-            modifier = Modifier.clickable { expanded = true }
-        )
+            text = stringResource(R.string.options_lenguaje),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp).weight(0.5f))
+
+        TextField(value = selectedLanguage.displayName.replaceFirstChar { it.uppercase() }, onValueChange = {}, enabled = false, modifier = Modifier.weight(1f))
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -126,7 +139,7 @@ fun LanguageDropdown(
                     expanded = false
                 }) {
                     Text(
-                        text = language.displayName,
+                        text = language.displayName.replaceFirstChar { it.uppercase() },
                         style = MaterialTheme.typography.body2
                     )
                 }

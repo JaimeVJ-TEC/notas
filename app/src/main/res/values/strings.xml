@@ -12,12 +12,12 @@
     <string name="calendar_save_event">Agregar evento</string>
     <string name="calendar_cancel">Cancelar</string>
     <string name="calendar_show_events">Mostrar los eventos del Mes</string>
-    <string name="calendar_show_event_date">\"Eventos del mes de \"</string>
-    <string name="calendar_show_event_day">\"Día \"</string>
-    <string name="calendar_no_events">No hay eventos este mes</string>
+    <string name="calendar_show_event_date">Eventos del mes de </string>
+    <string name="calendar_show_event_day">Día </string>
+    <string name="calendar_no_events">No hay eventos este mes </string>
     <string name="calendar_close">Cerrar</string>
-    <string name="calenar_add_event">\"Agregar evento para el \"</string>
-    <string name="calendar_of">\" de \"</string>
+    <string name="calenar_add_event">Agregar evento para el </string>
+    <string name="calendar_of"> de </string>
     <string name="about">"
                             Simple Notes - La forma más sencilla de capturar tus ideas y pensamientos.
 
@@ -46,7 +46,7 @@
     <string name="options_darkmode">Modo oscuro</string>
     <string name="options_preview">Vista previa</string>
     <string name="options_instruct_start">Configura Simple Notes.</string>
-    <string name="options_instruct_darkmode">\"🌓 Modo oscuro: Cambia el tema de la aplicacion para descansar tu vista en ambientes con poca luz. \"</string>
+    <string name="options_instruct_darkmode">🌓 Modo oscuro: Cambia el tema de la aplicacion para descansar tu vista en ambientes con poca luz. </string>
     <string name="option_row_enabled">Activado</string>
     <string name="option_row_disable">Desactivado</string>
     <string name="home_title"> Notas</string>
@@ -54,4 +54,7 @@
     <string name="calendario_title"> Calendario</string>
     <string name="opciones_title"> Opciones</string>
     <string name="acerca_title"> Acerca de la App</string>
+    <string name="calendar_show_title">Titulo: </string>
+    <string name="calendar_show_body">Descripcion: </string>
+    <string name="options_lenguaje">Lenguaje: </string>
 </resources>

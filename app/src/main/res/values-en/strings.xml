@@ -55,4 +55,7 @@
     <string name="calendario_title"> Calendar</string>
     <string name="opciones_title"> Options</string>
     <string name="acerca_title"> About us</string>
+    <string name="calendar_show_title">Title: </string>
+    <string name="calendar_show_body">Description: </string>
+    <string name="options_lenguaje">Language: </string>
 </resources>

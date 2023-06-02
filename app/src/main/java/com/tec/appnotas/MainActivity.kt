@@ -52,10 +52,8 @@ class MainActivity : ComponentActivity() {
             )
 
             val darkmode = gp.dataStore.getDarkModeValue.collectAsState(initial = false).value
-//            val locale = gp.dataStore.getLanguageValue.collectAsState(initial = "es").value
-//            Locale.setDefault(Locale(locale))
-//            Locale.setDefault(Locale("en"))
-//            var changed = false
+            val locale = gp.dataStore.getLanguageValue.collectAsState(initial = "es").value
+            changeLanguage(locale, LocalContext.current)
 
             AppnotasTheme(darkTheme = darkmode) {
                 // A surface container using the 'background' color from the theme
@@ -73,4 +71,17 @@ fun mainScreen(gp: GlobalProvider){
     ) {
         RootGraph(globalProvider = gp)
     }
+}
+
+
+fun changeLanguage(locale: String,context: Context){
+    Locale.setDefault(Locale(locale))
+    val configuration = context.resources.configuration
+    configuration.setLocale(Locale(locale))
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        configuration.setLocale(Locale(locale))
+    else
+        configuration.locale = Locale(locale)
+    var resources = context.resources
+    resources.updateConfiguration(configuration, resources.displayMetrics)
 }
