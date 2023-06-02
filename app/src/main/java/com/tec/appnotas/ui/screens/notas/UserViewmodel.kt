@@ -51,8 +51,8 @@ class UserViewmodel @Inject constructor(
     }
 
     fun getNotaFromCode(id: String) {
-        _userState.value = UserVMState.LOADING
-        if(!inserting) {
+        if(!inserting && _userState.value != UserVMState.LOADING) {
+            _userState.value = UserVMState.LOADING
             inserting = true
             viewModelScope.launch {
                 try {

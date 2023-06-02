@@ -47,10 +47,11 @@ fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostControl
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var detected by remember { mutableStateOf(false)}
+    var inserting by remember { mutableStateOf(false )}
 
     if(detected){
         Log.d("STATE",state.toString())
-        if(state == UserVMState.CONNECTION_ERROR){
+        if(state == UserVMState.CONNECTION_ERROR) {
             Toast.makeText(context, "Error de conexion", Toast.LENGTH_SHORT).show()
             globalProvider.userVM.notifiedError()
         }
@@ -75,8 +76,11 @@ fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostControl
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     BarcodeAnalyzer { result ->
-                        globalProvider.userVM.getNotaFromCode(result.rawValue.toString())
-                        detected = true
+                        if(!inserting) {
+                            inserting = true
+                            globalProvider.userVM.getNotaFromCode(result.rawValue.toString())
+                            detected = true
+                        }
                     }
                 )
                 try {
@@ -93,6 +97,12 @@ fun ScanScreen(globalProvider: GlobalProvider, navHostController: NavHostControl
             },
             modifier = Modifier.weight(1f)
         )
+
+        DisposableEffect(Unit) {
+            onDispose {
+                cameraProviderFuture.get().unbindAll()
+            }
+        }
 
     }
 
